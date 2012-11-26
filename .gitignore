@@ -28,5 +28,10 @@ obj/
 _ReSharper*/
 [Tt]est[Rr]esult*
 
+#ignore file
+.classpath
+.project
+
 #ignore dir
 .metadata
+.setting
