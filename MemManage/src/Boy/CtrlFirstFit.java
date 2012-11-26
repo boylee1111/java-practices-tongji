@@ -27,12 +27,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			// TODO ÅÐ¶ÏÄÚ´æÊÇ·ñ×ã¹»
 			memNum = 0;
 			blockSize = valueOfText();
-			JPanel memBlock = new MemBlock(memNum, blockSize);
-			JPanel memBlock2 = new MemBlock(memNum, blockSize);
-			memBlock.setBounds(50, 100, 50 ,320);
-			memBlock2.setBounds(250, 100, 50 ,320);
-			memFrame.add(memBlock);
-			memFrame.add(memBlock2);
+			
 			System.out.println(valueOfText());
 		}
 		if (event == memFrame.firstFreeButton)

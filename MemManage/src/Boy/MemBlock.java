@@ -3,7 +3,7 @@ package Boy;
 import java.awt.*;
 import javax.swing.*;
 
-public class MemBlock extends JPanel {
+public class MemBlock extends JLabel {
 	private final int width = 320;
 	
 	int num, size;
