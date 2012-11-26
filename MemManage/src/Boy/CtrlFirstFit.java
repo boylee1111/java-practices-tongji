@@ -5,18 +5,21 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class CtrlFirstFit implements ActionListener, KeyListener {
-	private List<MemBlock> firstList;
-	private List<MemBlock> freeList;
+	private List<MemBlock> blockList;
 	
 	private MemFrame memFrame = null;
 	
-	private int memNum, freeNum, blockSize;
+	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
+	private int memNum, blockSize, UsedSize, largestSize;
 
 	public CtrlFirstFit(MemFrame memFrame) {
 		this.memFrame = memFrame;
-		memNum = freeNum = 0;
+		memNum = 0;
 		blockSize = 0;
-//		freeList.add(new MemBlock(freeNum++, 640));
+		UsedSize = 0;
+		largestSize = Constants.memSize;
+		blockList = new LinkedList<MemBlock>();
+		blockList.add(new MemBlock(memNum++, largestSize));
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -25,9 +28,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		if (event == memFrame.firstAllocButton) {
 			System.out.println("first alloc button");
 			// TODO 判断内存是否足够
-			memNum = 0;
 			blockSize = valueOfText();
-			
+			allocMem();
 			System.out.println(valueOfText());
 		}
 		if (event == memFrame.firstFreeButton)
@@ -69,5 +71,20 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			System.out.println("请输入数字");
 		}
 		return value;
+	}
+	
+	public boolean allocMem() {		
+		if (blockSize > largestSize)
+			return false;
+		
+		int i = 0;		
+		for (Iterator<MemBlock> it = blockList.iterator(); it.hasNext(); i++) {
+			MemBlock tmpBlock = (MemBlock)it.next();
+			if (tmpBlock.size > blockSize && !tmpBlock.getUsed()) {
+				
+			}
+		}
+		
+		return true;
 	}
 }

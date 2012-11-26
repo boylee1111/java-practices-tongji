@@ -4,8 +4,7 @@ import java.util.*;
 import java.awt.event.*;
 
 public class CtrlBestFit implements ActionListener, KeyListener {
-	private List<MemBlock> bestList;
-	private List<MemBlock> freeSize;
+	private List<MemBlock> blockList;
 
 	private MemFrame memFrame = null;
 	
