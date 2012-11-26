@@ -35,3 +35,4 @@ _ReSharper*/
 #ignore dir
 .metadata
 .setting
+Java_Swing

@@ -15,7 +15,7 @@ public class MemFrame extends JFrame implements ActionListener {
 	private JMenuBar menuBar;
 	private JMenu fileMenu, aboutMenu;
 	private JMenuItem exitItem, aboutItem;
-	
+
 	private JPanel firstPane, bestPane; // Use GridLayout to layout
 	private JPanel cutoffPane; // Cut different algorithm
 	private JPanel firstMemPane, bestMemPane; // Memory Block Panel
@@ -29,11 +29,11 @@ public class MemFrame extends JFrame implements ActionListener {
 	private JLabel firstJobLabel, bestJobLabel;
 	
 	// Buttons, use as their name
-	private JButton firstDemoButton, bestDemoButton;
-	private JButton firstPackButton, bestPackButton;
-	private JButton firstLogButton, bestLogButton;
-	private JButton firstAllocButton, bestAllocButton;
-	private JButton firstFreeButton, bestFreeButton;
+	JButton firstDemoButton, bestDemoButton;
+	JButton firstPackButton, bestPackButton;
+	JButton firstLogButton, bestLogButton;
+	JButton firstAllocButton, bestAllocButton;
+	JButton firstFreeButton, bestFreeButton;
 	
 	// Interaction
 	JTextField firstAllocText, bestAllocText;
