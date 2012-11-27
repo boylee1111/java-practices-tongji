@@ -18,6 +18,8 @@ public class Constants {
 	static Rectangle firstPaneRec = new Rectangle(98, 58, 204, 324);
 	static Rectangle bestPaneRec = new Rectangle(498, 58, 204, 324);
 	
+	enum Type {FIRST_FIT, BEST_FIT};
+	
 	// Get the integer value of text field
 	public static int valueOfText(JTextField TF) {
 		int value = 0;
@@ -46,44 +48,80 @@ public class Constants {
 	}
 	
 	// Pack algorithm
-	public static boolean pack(MemFrame memFrame, LinkedList<MemBlock> list) {
+	public static boolean pack(MemFrame memFrame, LinkedList<MemBlock> list, Type type) {
 		MemBlock firstBlock = list.getFirst();
 		// If the first block is free, make the second block be the first
 		if (!firstBlock.getUsed()) {
 			list.remove(firstBlock);
-			memFrame.firstMemPane.remove(firstBlock);
+			switch (type) {
+			case FIRST_FIT:
+				memFrame.firstMemPane.remove(firstBlock);
+				break;
+			case BEST_FIT:
+				memFrame.bestMemPane.remove(firstBlock);
+				break;
+			}
 			firstBlock = list.getFirst();
 			firstBlock.setBounds(2, 2, blockWidth, firstBlock.size / factor);
 		}
 
-		int index = 0, currentPos = 2;
+		int currentPos = 2;
 		LinkedList<MemBlock> toDelete = new LinkedList<MemBlock>();
-		for (Iterator<MemBlock> it = list.iterator(); it.hasNext(); index++) {
+		for (Iterator<MemBlock> it = list.iterator(); it.hasNext();) {
 			MemBlock tmpBlock = (MemBlock)it.next();
 			if (tmpBlock == list.getLast())
 				break;
 			if (tmpBlock.getUsed()) {
 				if (tmpBlock.beginY != currentPos) {
-					tmpBlock.setBounds(2, currentPos, blockWidth, tmpBlock.size / factor);
+					tmpBlock.beginY = currentPos;
+					tmpBlock.setBounds(2, tmpBlock.beginY, blockWidth, tmpBlock.size / factor);
 				}
 				currentPos += tmpBlock.size / factor;
 				continue;
 			} else {
-				memFrame.firstMemPane.remove(tmpBlock);
+				switch (type) {
+				case FIRST_FIT:
+					memFrame.firstMemPane.remove(tmpBlock);
+					break;
+				case BEST_FIT:
+					memFrame.bestMemPane.remove(tmpBlock);
+					break;
+				}
 				toDelete.add(tmpBlock);
 			}
 		}
 		list.removeAll(toDelete);
 		
-		MemBlock freeBlock = list.getLast();
-		freeBlock.size = 2 * (322 - currentPos);
-		freeBlock.setBounds(2, currentPos, blockWidth, freeBlock.size / factor);
-		System.out.println(freeBlock.size);
-
-//		for (int i = 0; i < list.size() - 1; i++) {
-//			MemBlock tmpBlock = list.get(i);
+		// Deal with the last free block
+		MemBlock lastBlock= list.getLast();
+		if (lastBlock.getUsed()) {
+			lastBlock.setBounds(2, currentPos, blockWidth, lastBlock.size / factor);
+			currentPos += lastBlock.size / factor;
+			
+			MemBlock freeBlock = new MemBlock("free", 2 * (322 - currentPos));
+			freeBlock.beginY = currentPos;
+			freeBlock.setBounds(2, freeBlock.beginY, blockWidth, freeBlock.size / factor);
+			freeBlock.setUsed(false);
+			list.add(freeBlock);
+			switch (type) {
+			case FIRST_FIT:
+				memFrame.firstMemPane.add(freeBlock);
+				break;
+			case BEST_FIT:
+				memFrame.bestMemPane.add(freeBlock);
+				break;
+			}
+		} else {
+			lastBlock.size = 2 * (322 - currentPos);
+			lastBlock.beginY = currentPos;
+			lastBlock.setBounds(2, lastBlock.beginY, blockWidth, lastBlock.size / factor);
+		}
+		
+//		for (Iterator<MemBlock> it = list.iterator(); it.hasNext();) {
+//			MemBlock tmpBlock = (MemBlock)it.next();
 //			System.out.println(tmpBlock.name);
 //		}
+
 		return true;
 	}
 }

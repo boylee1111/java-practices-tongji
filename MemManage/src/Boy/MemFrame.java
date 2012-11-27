@@ -145,11 +145,11 @@ public class MemFrame extends JFrame implements ActionListener {
 		contentPane.add(cutoffPane);
 		
 		firstAllocButton = new JButton("Alloc");
-		firstAllocText = new JTextField("0");
+		firstAllocText = new JTextField("");
 		firstKLabel = new JLabel("K");
 		firstFreeButton = new JButton("Free");
 		firstJobLabel = new JLabel("Job Num:", JLabel.CENTER);
-		firstFreeText = new JTextField("0");
+		firstFreeText = new JTextField("");
 
 		firstAllocButton.setFont(font);
 		firstAllocText.setFont(font);
@@ -173,11 +173,11 @@ public class MemFrame extends JFrame implements ActionListener {
 		firstCtrlPane.add(firstFreeText);
 
 		bestAllocButton = new JButton("Alloc");
-		bestAllocText = new JTextField("0");
+		bestAllocText = new JTextField("");
 		bestKLabel = new JLabel("K");
 		bestFreeButton = new JButton("Free");
 		bestJobLabel = new JLabel("Job Num:", JLabel.CENTER);
-		bestFreeText = new JTextField("0");
+		bestFreeText = new JTextField("");
 
 		bestAllocButton.setFont(font);
 		bestAllocText.setFont(font);

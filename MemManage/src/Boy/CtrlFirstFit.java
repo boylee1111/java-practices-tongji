@@ -3,12 +3,15 @@ package Boy;
 
 import java.util.*;
 import java.awt.event.*;
-import javax.swing.*;
+
+import Boy.Constants.Type;
 
 public class CtrlFirstFit implements ActionListener, KeyListener {
 	private LinkedList<MemBlock> blockList;
 	
 	private MemFrame memFrame = null;
+	
+	Constants.Type type = Type.FIRST_FIT;
 	
 	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
 	private int memNum, usedSize, largestSize;
@@ -23,12 +26,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	
 	public void actionPerformed(ActionEvent e) {
 		// TODO 添加按钮委托 first-fit
-		if (blockList.isEmpty()) {
-			MemBlock firstBlock = new MemBlock("free", largestSize);
-			firstBlock.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
-			blockList.add(firstBlock);
-			memFrame.firstMemPane.add(firstBlock);
-		}
+		initList();		
 		Object event = e.getSource();
 		if (event == memFrame.firstAllocButton) {
 			int blockSize = Constants.valueOfText(memFrame.firstAllocText);
@@ -41,8 +39,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			freeMem(memName);
 		}
 		if (event == memFrame.firstPackButton) {
-			System.out.println("first pack button");
-			Constants.pack(memFrame, blockList);
+			Constants.pack(memFrame, blockList, type);
+			largestSize = Constants.getLargestSize(blockList);
 		}
 //		if (event == memFrame.firstDemoButton)
 //			System.out.println("first demo button");
@@ -52,21 +50,15 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 
 	public void keyReleased(KeyEvent e) {
 		// TODO 添加回车事件 first-fit
-		if (blockList.isEmpty()) {
-			MemBlock firstBlock = new MemBlock("free", largestSize);
-			firstBlock.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
-			blockList.add(firstBlock);
-			memFrame.firstMemPane.add(firstBlock);
-		}
-		
+		initList();
 		Object event = e.getSource();
 		int keyCode = e.getKeyCode();
-		if (event == memFrame.firstAllocText && keyCode == KeyEvent.VK_ENTER) {
+		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.firstAllocText) {
 			int blockSize = Constants.valueOfText(memFrame.firstAllocText);
 			String memName = "Job " + memNum;
 			allocMem(memName,  blockSize);
 		}
-		if (event == memFrame.firstFreeText && keyCode == KeyEvent.VK_ENTER) {
+		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.firstFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.firstFreeText);
 			String memName = "Job " + jobNum;
 			freeMem(memName);
@@ -104,12 +96,12 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
-		
+
 		memNum++;
 		return true;
 	}
 	
-	public boolean freeMem(String name) {
+	public void freeMem(String name) {
 		MemBlock freeBlock = null;
 		for (Iterator<MemBlock> it = blockList.iterator(); it.hasNext();) {
 			MemBlock tmpBlock = (MemBlock)it.next();
@@ -128,7 +120,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			if (i < blockList.size() - 1) {
 				nextBlock = blockList.get(i + 1);
 				// TODO 后继为空闲内存
-				if (!nextBlock.getUsed() || blockList.indexOf(nextBlock) == blockList.size() - 1){
+				if (!nextBlock.getUsed()){
 					freeBlock.size += nextBlock.size;
 					freeBlock.setBounds(2, freeBlock.beginY, Constants.blockWidth, freeBlock.size / Constants.factor);
 					blockList.remove(nextBlock);
@@ -155,8 +147,16 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
-		
-		return true;
+	}
+
+	// Initialize list
+	public void initList() {
+		if (blockList.isEmpty()) {
+			MemBlock firstBlock = new MemBlock("free", largestSize);
+			firstBlock.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
+			blockList.add(firstBlock);
+			memFrame.firstMemPane.add(firstBlock);
+		}
 	}
 	
 	public void keyPressed(KeyEvent e) {
