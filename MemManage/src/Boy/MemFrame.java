@@ -42,7 +42,7 @@ public class MemFrame extends JFrame implements ActionListener {
 
 	public MemFrame() {
 		super("Memory Management");
-		this.setSize(800, 600);
+		this.setSize(Constants.mainFrame);
 	}
 	
 	public void initWithAlgo(CtrlFirstFit firstFitDel, CtrlBestFit bestFitDel) {
@@ -51,7 +51,6 @@ public class MemFrame extends JFrame implements ActionListener {
 		
 		contentPane = new JPanel();
 		contentPane.setLayout(null);
-//		contentPane.setBackground(Color.BLACK);
 		this.add(contentPane);
 		
 		// Create menu bar, menus and menu items
@@ -225,6 +224,7 @@ public class MemFrame extends JFrame implements ActionListener {
 		firstMemPane.add(firstBottomLabel, JLayeredPane.FRAME_CONTENT_LAYER);
 		bestMemPane.add(bestBottomLabel, JLayeredPane.FRAME_CONTENT_LAYER);
 
+		this.setResizable(false);
 		this.setVisible(true);
 	}
 

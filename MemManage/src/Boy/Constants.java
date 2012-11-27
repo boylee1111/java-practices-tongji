@@ -15,6 +15,8 @@ public class Constants {
 	
 	static int blockWidth = 200;
 	
+	static Dimension mainFrame = new Dimension(800, 600);
+	static Dimension logCatFrame = new Dimension(200, 500);
 	static Rectangle firstPaneRec = new Rectangle(98, 58, 204, 324);
 	static Rectangle bestPaneRec = new Rectangle(498, 58, 204, 324);
 	
