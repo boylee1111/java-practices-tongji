@@ -122,12 +122,13 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 					c = 'A';
 					tmpBlock.setBounds(2, tmpBlock.beginY, Constants.blockWidth, tmpBlock.size / 2);
 					newBlock = new MemBlock("free", restSize);
-					newBlock.setBounds(2, tmpBlock.beginY + size / 2, Constants.blockWidth, restSize / 2);
-					newBlock.beginY = tmpBlock.beginY + size / 2;
+					newBlock.beginY = tmpBlock.beginY + tmpBlock.size / 2;
+					newBlock.setBounds(2, newBlock.beginY, Constants.blockWidth, newBlock.size / 2);
 					break;
 				}
 			}
 		}
+		
 		if (c == 'A') {
 			newBlock.setUsed(false);
 			blockList.add(i + 1, newBlock);
@@ -140,6 +141,9 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		largestSize = getLargestSize();
 		
 		memNum++;
+		for (MemBlock aaa : blockList) {
+			System.out.println(aaa.name);
+		}
 		return true;
 	}
 	
@@ -166,6 +170,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 					freeBlock.size += nextBlock.size;
 					freeBlock.setBounds(2, freeBlock.beginY, Constants.blockWidth, freeBlock.size / 2);
 					blockList.remove(nextBlock);
+					memFrame.firstMemPane.remove(nextBlock);
 				}
 			}
 			
@@ -179,11 +184,9 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 					preBlock.size += freeBlock.size;
 					preBlock.setBounds(2, preBlock.beginY, Constants.blockWidth, preBlock.size / 2 );
 					blockList.remove(freeBlock);
-					System.out.println(blockList.size());
+					memFrame.firstMemPane.remove(freeBlock);
+//					System.out.println(preBlock.size);
 				}
-			}
-			for (MemBlock aaa : blockList) {
-				System.out.println(aaa.name);
 			}
 		} else {
 			System.out.println("free block == null");

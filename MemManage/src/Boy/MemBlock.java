@@ -27,7 +27,7 @@ public class MemBlock extends JLabel {
 	
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
-		if (isUsed) {
+		if (this.isUsed) {
 			this.setBackground(Color.RED);
 			this.setText(name);
 		} else {
