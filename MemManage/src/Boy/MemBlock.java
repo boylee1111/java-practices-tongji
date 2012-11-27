@@ -29,7 +29,7 @@ public class MemBlock extends JLabel {
 		this.isUsed = isUsed;
 		if (this.isUsed) {
 			this.setBackground(Color.RED);
-			this.setText(name);
+			this.setText(name + "# " + size + 'K');
 		} else {
 			this.setBackground(Color.BLUE);
 			this.setText("");

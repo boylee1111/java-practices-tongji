@@ -107,6 +107,10 @@ public class MemFrame extends JFrame implements ActionListener {
 		bestPackButton.setFont(font);
 		firstPackButton.setBounds(20, 450, 125, 40);
 		bestPackButton.setBounds(420, 450, 125, 40);
+		
+		firstPackButton.addActionListener(firstFit);
+		bestPackButton.addActionListener(bestFit);
+		
 		contentPane.add(firstPackButton);
 		contentPane.add(bestPackButton);
 		
