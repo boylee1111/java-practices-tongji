@@ -18,7 +18,7 @@ public class Constants {
 	static Rectangle bestPaneRec = new Rectangle(518, 8, blockWidth + 4, 644);
 	
 	enum Type {FIRST_FIT, BEST_FIT};
-	
+
 	// Get the integer value of text field
 	public static int valueOfText(JTextField TF) {
 		int value = 0;
@@ -130,16 +130,22 @@ public class Constants {
 		return true;
 	}
 	
+	// TODO ”–Œ Ã‚
 	public static void clear(MemFrame memFrame, LinkedList<MemBlock> list, Type type) {
 		switch (type) {
-		case FIRST_FIT:
+		case FIRST_FIT: {
+			for (Iterator<MemBlock> it = list.iterator(); it.hasNext();) {
+				MemBlock tmpBlock = (MemBlock)it.next();
+				memFrame.firstMemPane.remove(tmpBlock);
+				tmpBlock.setVisible(false);
+			}
 			list.clear();
-			memFrame.firstFit.initList();
 			memFrame.firstFit.logCat.appendLog("Clear!");
 			break;
+		}
 		case BEST_FIT:
 			list.clear();
-			memFrame.bestFit.initList();
+			memFrame.bestMemPane.removeAll();
 			memFrame.bestFit.logCat.appendLog("Clear!");
 		}
 	}

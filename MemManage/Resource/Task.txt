@@ -1,0 +1,11 @@
+Job#1 true 130
+Job#2 true 60
+Job#3 true 100
+Job#2 false 60
+Job#4 true 200
+Job#3 false 100
+Job#1 false 130
+Job#5 true 140
+Job#6 true 60
+Job#7 true 50
+Job#6 false 60

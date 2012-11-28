@@ -16,7 +16,6 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 	
 	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
 	private int memNum, largestSize;
-	
 	private float usedSize;
 	
 	public CtrlBestFit(MemFrame memFrame) {
@@ -35,7 +34,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		if (event == memFrame.bestAllocButton) {
 			int blockSize = Constants.valueOfText(memFrame.bestAllocText);
 			if (blockSize != -1) {
-				String memName = "Job " + memNum;
+				String memName = "Job#" + memNum;
 				if (!allocMem(memName,  blockSize)) {
 					logCat.appendLog("Allocate unsuccessfully!");
 				}
@@ -44,7 +43,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		if (event == memFrame.bestFreeButton) {
 			int jobNum = Constants.valueOfText(memFrame.bestFreeText);
 			if (jobNum != -1){
-				String memName = "Job " + jobNum;
+				String memName = "Job#" + jobNum;
 				freeMem(memName);
 			}
 		}
@@ -58,11 +57,14 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				largestSize = Constants.getLargestSize(blockList);
 			}
 		}
-//		if (event == memFrame.firstDemoButton) {
-//			System.out.println("first demo button");
-//		}
+		// TODO 演示
+		if (event == memFrame.bestDemoButton) {
+			System.out.println("best demo button");
+		}
 		if (event == memFrame.bestClearButton) {
 			Constants.clear(memFrame, blockList, type);
+			largestSize = Constants.getLargestSize(blockList);
+			logCat.setRate(0.0f);
 		}
 		if (event == memFrame.bestLogButton) {
 			logCat.setVisible(true);
@@ -76,7 +78,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.bestAllocText) {
 			int blockSize = Constants.valueOfText(memFrame.bestAllocText);
 			if (blockSize != -1) {
-				String memName = "Job " + memNum;
+				String memName = "Job#" + memNum;
 				if (!allocMem(memName,  blockSize)) {
 					logCat.appendLog("Allocation unsuccessfully!");
 				}
@@ -84,7 +86,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		}
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.bestFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.bestFreeText);
-			String memName = "Job " + jobNum;
+			String memName = "Job#" + jobNum;
 			freeMem(memName);
 		}
 	}
@@ -190,7 +192,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
-		logCat.appendLog("Free " + name + "# successfully!");
+		logCat.appendLog("Free " + name + " successfully!");
 		logCat.setRate(usedSize / Constants.memSize);
 	}
 
