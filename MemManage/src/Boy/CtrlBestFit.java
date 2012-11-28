@@ -10,10 +10,14 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 
 	private MemFrame memFrame = null;
 	
+	MemLogCat logCat = null;
+	
 	Constants.Type type = Type.BEST_FIT;
 	
 	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
-	private int memNum, usedSize, largestSize;
+	private int memNum, largestSize;
+	
+	private float usedSize;
 	
 	public CtrlBestFit(MemFrame memFrame) {
 		this.memFrame = memFrame;
@@ -21,10 +25,11 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		usedSize = 0;
 		largestSize = Constants.memSize;
 		blockList = new LinkedList<MemBlock>();
+		logCat = new MemLogCat();
+		logCat.setTitle("Best-Fit LogCat");
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		// TODO 添加按钮委托 best-fit
 		initList();	
 		Object event = e.getSource();
 		if (event == memFrame.bestAllocButton) {
@@ -38,17 +43,21 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 			freeMem(memName);
 		}
 		if (event == memFrame.bestPackButton) {
-			Constants.pack(memFrame, blockList, type);
-			largestSize = Constants.getLargestSize(blockList);
+			if (blockList.size() == 1 && !blockList.getFirst().getUsed()) {
+				System.out.println("NO used");
+			} else {
+				Constants.pack(memFrame, blockList, type);
+				largestSize = Constants.getLargestSize(blockList);
+			}
 		}
 //		if (event == memFrame.bestDemoButton)
 //			System.out.println("best demo button");
-//		if (event == memFrame.bestLogButton)
-//			System.out.println("best log button");
+		if (event == memFrame.bestLogButton) {
+			logCat.setVisible(true);
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
-		// TODO 添加回车事件 best-fit
 		initList();
 		Object event = e.getSource();
 		int keyCode = e.getKeyCode();
@@ -98,6 +107,8 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
+		logCat.appendLog("Alloc " + size + "K successfully!");
+		logCat.setRate(usedSize / Constants.memSize);
 
 		memNum++;
 		return true;
@@ -121,7 +132,6 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 			// i < blockList.size(), has next
 			if (i < blockList.size() - 1) {
 				nextBlock = blockList.get(i + 1);
-				// TODO 后继为空闲内存
 				if (!nextBlock.getUsed()){
 					freeBlock.size += nextBlock.size;
 					freeBlock.setBounds(2, freeBlock.beginY, Constants.blockWidth, freeBlock.size / Constants.factor);
@@ -134,7 +144,6 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 			// i > 0, has previous
 			if (i > 0) {
 				preBlock = blockList.get(i - 1);
-				// TODO 前驱为空闲内存
 				if (!preBlock.getUsed()) {
 					preBlock.size += freeBlock.size;
 					preBlock.setBounds(2, preBlock.beginY, Constants.blockWidth, preBlock.size / Constants.factor );
@@ -149,6 +158,8 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
+		logCat.appendLog("Free " + name + "# successfully!");
+		logCat.setRate(usedSize / Constants.memSize);
 	}
 
 	// Initialize list

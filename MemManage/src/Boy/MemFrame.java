@@ -119,6 +119,10 @@ public class MemFrame extends JFrame implements ActionListener {
 		bestLogButton.setFont(font);
 		firstLogButton.setBounds(20, 490, 125, 40);
 		bestLogButton.setBounds(420, 490, 125, 40);
+		
+		firstLogButton.addActionListener(firstFit);
+		bestLogButton.addActionListener(bestFit);
+		
 		contentPane.add(firstLogButton);
 		contentPane.add(bestLogButton);
 		
@@ -224,8 +228,15 @@ public class MemFrame extends JFrame implements ActionListener {
 		firstMemPane.add(firstBottomLabel, JLayeredPane.FRAME_CONTENT_LAYER);
 		bestMemPane.add(bestBottomLabel, JLayeredPane.FRAME_CONTENT_LAYER);
 
+//		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setVisible(true);
+		
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				System.exit(0);
+			}
+		});
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -238,9 +249,5 @@ public class MemFrame extends JFrame implements ActionListener {
 					"Boy Lee. All rights reserved.",
 					"Copyright(c)",
 					JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	public void windowClosing(WindowEvent e) {
-		System.exit(0);
 	}
 }

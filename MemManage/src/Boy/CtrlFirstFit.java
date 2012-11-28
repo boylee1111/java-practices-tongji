@@ -11,10 +11,14 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	
 	private MemFrame memFrame = null;
 	
+	MemLogCat logCat = null;
+	
 	Constants.Type type = Type.FIRST_FIT;
 	
 	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
-	private int memNum, usedSize, largestSize;
+	private int memNum, largestSize;
+	
+	private float usedSize;
 
 	public CtrlFirstFit(MemFrame memFrame) {
 		this.memFrame = memFrame;
@@ -22,6 +26,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		usedSize = 0;
 		largestSize = Constants.memSize;
 		blockList = new LinkedList<MemBlock>();
+		logCat = new MemLogCat();
+		logCat.setTitle("First-Fit LogCat");
 	}
 	
 	public void actionPerformed(ActionEvent e) {
@@ -39,13 +45,18 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			freeMem(memName);
 		}
 		if (event == memFrame.firstPackButton) {
-			Constants.pack(memFrame, blockList, type);
-			largestSize = Constants.getLargestSize(blockList);
+			if (blockList.size() == 1 && !blockList.getFirst().getUsed()) {
+				System.out.println("NO used");
+			} else {
+				Constants.pack(memFrame, blockList, type);
+				largestSize = Constants.getLargestSize(blockList);
+			}
 		}
 //		if (event == memFrame.firstDemoButton)
 //			System.out.println("first demo button");
-//		if (event == memFrame.firstLogButton)
-//			System.out.println("first log button");
+		if (event == memFrame.firstLogButton) {
+			logCat.setVisible(true);
+		}
 	}
 
 	public void keyReleased(KeyEvent e) {
@@ -96,6 +107,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
+		logCat.appendLog("Alloc " + size + "K successfully!");
+		logCat.setRate(usedSize / Constants.memSize);
 
 		memNum++;
 		return true;
@@ -147,6 +160,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
+		logCat.appendLog("Free " + name + " successfully!");
+		logCat.setRate(usedSize / Constants.memSize);
 	}
 
 	// Initialize list

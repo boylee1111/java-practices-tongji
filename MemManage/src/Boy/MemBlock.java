@@ -21,7 +21,7 @@ public class MemBlock extends JLabel {
 		beginY = 2;
 		isUsed = false;
 		this.setOpaque(true);
-		this.setBackground(Color.BLUE);
+		this.setBackground(Color.GREEN);
 		this.setBorder(new EtchedBorder(EtchedBorder.RAISED));
 	}
 	
@@ -31,7 +31,7 @@ public class MemBlock extends JLabel {
 			this.setBackground(Color.RED);
 			this.setText(name + "# " + size + 'K');
 		} else {
-			this.setBackground(Color.BLUE);
+			this.setBackground(Color.GREEN);
 			this.setText("");
 			name = "free";
 		}

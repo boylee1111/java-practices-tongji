@@ -16,7 +16,7 @@ public class Constants {
 	static int blockWidth = 200;
 	
 	static Dimension mainFrame = new Dimension(800, 600);
-	static Dimension logCatFrame = new Dimension(200, 500);
+	static Dimension logCatFrame = new Dimension(300, 500);
 	static Rectangle firstPaneRec = new Rectangle(98, 58, 204, 324);
 	static Rectangle bestPaneRec = new Rectangle(498, 58, 204, 324);
 	
@@ -119,10 +119,13 @@ public class Constants {
 			lastBlock.setBounds(2, lastBlock.beginY, blockWidth, lastBlock.size / factor);
 		}
 		
-//		for (Iterator<MemBlock> it = list.iterator(); it.hasNext();) {
-//			MemBlock tmpBlock = (MemBlock)it.next();
-//			System.out.println(tmpBlock.name);
-//		}
+		switch (type) {
+		case FIRST_FIT:
+			memFrame.firstFit.logCat.appendLog("Memory pack successfully!");
+			break;
+		case BEST_FIT:
+			memFrame.bestFit.logCat.appendLog("Memory pack successfully!");
+		}
 
 		return true;
 	}
