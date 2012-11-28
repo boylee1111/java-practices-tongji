@@ -32,6 +32,7 @@ public class MemFrame extends JFrame implements ActionListener {
 	// Buttons, use as their name
 	JButton firstDemoButton, bestDemoButton;
 	JButton firstPackButton, bestPackButton;
+	JButton firstClearButton, bestClearButton;
 	JButton firstLogButton, bestLogButton;
 	JButton firstAllocButton, bestAllocButton;
 	JButton firstFreeButton, bestFreeButton;
@@ -76,7 +77,7 @@ public class MemFrame extends JFrame implements ActionListener {
 		this.setJMenuBar(menuBar);
 		
 		font = new Font("Times New Roman", Font.BOLD, 13);
-		titleFont = new Font("Times New Roman", Font.BOLD, 25);
+		titleFont = new Font("Times New Roman", Font.BOLD, 23);
 		demoFont = new Font("Times New Roman", Font.BOLD, 18);
 		
 		// Title
@@ -86,8 +87,8 @@ public class MemFrame extends JFrame implements ActionListener {
 		bestLabel.setForeground(Color.RED);
 		firstLabel.setFont(titleFont);
 		bestLabel.setFont(titleFont);
-		firstLabel.setBounds(50, 10, 300, 50);
-		bestLabel.setBounds(450, 10, 300, 50);
+		firstLabel.setBounds(230, 30, 330, 50);
+		bestLabel.setBounds(730, 30, 330, 50);
 		contentPane.add(firstLabel);
 		contentPane.add(bestLabel);
 
@@ -95,8 +96,12 @@ public class MemFrame extends JFrame implements ActionListener {
 		bestDemoButton = new JButton("Best-Fit Demo");
 		firstDemoButton.setFont(demoFont);
 		bestDemoButton.setFont(demoFont);
-		firstDemoButton.setBounds(125, 390, 150, 50);
-		bestDemoButton.setBounds(525, 390, 150, 50);
+		firstDemoButton.setBounds(320, 150, 150, 50);
+		bestDemoButton.setBounds(820, 150, 150, 50);
+		
+		firstDemoButton.addActionListener(firstFit);
+		bestDemoButton.addActionListener(bestFit);
+		
 		contentPane.add(firstDemoButton);
 		contentPane.add(bestDemoButton);
 		
@@ -104,8 +109,8 @@ public class MemFrame extends JFrame implements ActionListener {
 		bestPackButton = new JButton("Best-Fit Pack");
 		firstPackButton.setFont(font);
 		bestPackButton.setFont(font);
-		firstPackButton.setBounds(20, 450, 125, 40);
-		bestPackButton.setBounds(420, 450, 125, 40);
+		firstPackButton.setBounds(330, 250, 130, 40);
+		bestPackButton.setBounds(830, 250, 130, 40);
 		
 		firstPackButton.addActionListener(firstFit);
 		bestPackButton.addActionListener(bestFit);
@@ -113,12 +118,25 @@ public class MemFrame extends JFrame implements ActionListener {
 		contentPane.add(firstPackButton);
 		contentPane.add(bestPackButton);
 		
+		firstClearButton = new JButton("First-Fit Clear");
+		bestClearButton = new JButton("Best-Fit Clear");
+		firstClearButton.setFont(font);
+		bestClearButton.setFont(font);
+		firstClearButton.setBounds(330, 300, 130, 40);
+		bestClearButton.setBounds(830, 300, 130, 40);
+		
+		firstClearButton.addActionListener(firstFit);
+		bestClearButton.addActionListener(bestFit);
+		
+		contentPane.add(firstClearButton);
+		contentPane.add(bestClearButton);
+		
 		firstLogButton = new JButton("First-Fit LogCat");
 		bestLogButton = new JButton("Best-Fit LogCat");
 		firstLogButton.setFont(font);
 		bestLogButton.setFont(font);
-		firstLogButton.setBounds(20, 490, 125, 40);
-		bestLogButton.setBounds(420, 490, 125, 40);
+		firstLogButton.setBounds(330, 350, 130, 40);
+		bestLogButton.setBounds(830, 350, 130, 40);
 		
 		firstLogButton.addActionListener(firstFit);
 		bestLogButton.addActionListener(bestFit);
@@ -132,19 +150,19 @@ public class MemFrame extends JFrame implements ActionListener {
 		
 		// Set the layout
 		firstCtrlPane.setLayout(null);
-		firstCtrlPane.setLayout(new GridLayout(2, 3, 5, 5));
-		firstCtrlPane.setBounds(160, 450, 200, 80);
+		firstCtrlPane.setLayout(new GridLayout(2, 3, 3, 3));
+		firstCtrlPane.setBounds(295, 450, 200, 80);
 //		firstPane.setBackground(Color.WHITE);
 		bestCtrlPane.setLayout(null);
-		bestCtrlPane.setLayout(new GridLayout(2, 3, 5, 5));
-		bestCtrlPane.setBounds(560, 450, 200, 80);
+		bestCtrlPane.setLayout(new GridLayout(2, 3, 3, 3));
+		bestCtrlPane.setBounds(795, 450, 200, 80);
 //		bestPane.setBackground(Color.WHITE);
 		contentPane.add(firstCtrlPane);
 		contentPane.add(bestCtrlPane);
 		
 		cutoffPane.setLayout(null);
-		cutoffPane.setBounds(399, 0, 2, 600);
-		cutoffPane.setBackground(Color.GREEN);
+		cutoffPane.setBounds(497, 0, 6, Constants.mainFrame.height);
+		cutoffPane.setBackground(Color.BLACK);
 		contentPane.add(cutoffPane);
 		
 		firstAllocButton = new JButton("Alloc");
@@ -219,8 +237,8 @@ public class MemFrame extends JFrame implements ActionListener {
 		
 		firstBottomLabel = new JLabel();
 		bestBottomLabel = new JLabel();
-		firstBottomLabel.setBounds(2, 2, Constants.blockWidth, Constants.memSize / 2);
-		bestBottomLabel.setBounds(2, 2, Constants.blockWidth, Constants.memSize / 2);
+		firstBottomLabel.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
+		bestBottomLabel.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
 		firstBottomLabel.setOpaque(true);
 		bestBottomLabel.setOpaque(true);
 		firstBottomLabel.setBackground(Color.GREEN);

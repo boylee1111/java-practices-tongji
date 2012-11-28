@@ -2,7 +2,7 @@ package Boy;
 
 import java.util.*;
 import java.awt.event.*;
-
+import javax.swing.*;
 import Boy.Constants.Type;
 
 public class CtrlBestFit implements ActionListener, KeyListener {
@@ -34,24 +34,36 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		Object event = e.getSource();
 		if (event == memFrame.bestAllocButton) {
 			int blockSize = Constants.valueOfText(memFrame.bestAllocText);
-			String memName = "Job " + memNum;
-			allocMem(memName, blockSize);
+			if (blockSize != -1) {
+				String memName = "Job " + memNum;
+				if (!allocMem(memName,  blockSize)) {
+					logCat.appendLog("Allocate unsuccessfully!");
+				}
+			}
 		}
 		if (event == memFrame.bestFreeButton) {
 			int jobNum = Constants.valueOfText(memFrame.bestFreeText);
-			String memName = "Job " + jobNum;
-			freeMem(memName);
+			if (jobNum != -1){
+				String memName = "Job " + jobNum;
+				freeMem(memName);
+			}
 		}
 		if (event == memFrame.bestPackButton) {
-			if (blockList.size() == 1 && !blockList.getFirst().getUsed()) {
-				System.out.println("NO used");
+			if (!Constants.pack(memFrame, blockList, type)) {
+				JOptionPane.showMessageDialog(null, 
+						"Please allocte memory first",
+						"Error",
+						JOptionPane.WARNING_MESSAGE);
 			} else {
-				Constants.pack(memFrame, blockList, type);
 				largestSize = Constants.getLargestSize(blockList);
 			}
 		}
-//		if (event == memFrame.bestDemoButton)
-//			System.out.println("best demo button");
+//		if (event == memFrame.firstDemoButton) {
+//			System.out.println("first demo button");
+//		}
+		if (event == memFrame.bestClearButton) {
+			Constants.clear(memFrame, blockList, type);
+		}
 		if (event == memFrame.bestLogButton) {
 			logCat.setVisible(true);
 		}
@@ -63,8 +75,12 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		int keyCode = e.getKeyCode();
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.bestAllocText) {
 			int blockSize = Constants.valueOfText(memFrame.bestAllocText);
-			String memName = "Job " + memNum;
-			allocMem(memName,  blockSize);
+			if (blockSize != -1) {
+				String memName = "Job " + memNum;
+				if (!allocMem(memName,  blockSize)) {
+					logCat.appendLog("Allocation unsuccessfully!");
+				}
+			}
 		}
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.bestFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.bestFreeText);
@@ -74,8 +90,20 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 	}
 	
 	private boolean allocMem(String name, int size) {
-		if (size > largestSize)
+		if (size > largestSize) {
+			JOptionPane.showMessageDialog(null, 
+					"Memory shortage, please try packing then allocate.",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
 			return false;
+		}
+		if (size < Constants.memLeast) {
+			JOptionPane.showMessageDialog(null, 
+					"Please allocate 10K at least.",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
 		
 		int i = 0, min = 640;
 		for (Iterator<MemBlock> it = blockList.iterator(); it.hasNext();) {
@@ -107,7 +135,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
-		logCat.appendLog("Alloc " + size + "K successfully!");
+		logCat.appendLog("Allocate " + size + "K successfully!");
 		logCat.setRate(usedSize / Constants.memSize);
 
 		memNum++;
@@ -152,8 +180,12 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				}
 			}
 		} else {
-			// TODO 检车输入正确的内存块号
-			System.out.println("free block == null");
+			JOptionPane.showMessageDialog(null, 
+					"NO " + name + "!",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			logCat.appendLog("Free unsuccessfully!");
+			return;
 		}
 
 		// Get the largest size that hasn't used

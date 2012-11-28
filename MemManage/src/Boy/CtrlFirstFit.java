@@ -1,9 +1,8 @@
 package Boy;
 
-
 import java.util.*;
 import java.awt.event.*;
-
+import javax.swing.*;
 import Boy.Constants.Type;
 
 public class CtrlFirstFit implements ActionListener, KeyListener {
@@ -31,43 +30,58 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		// TODO 添加按钮委托 first-fit
 		initList();		
 		Object event = e.getSource();
 		if (event == memFrame.firstAllocButton) {
 			int blockSize = Constants.valueOfText(memFrame.firstAllocText);
-			String memName = "Job " + memNum;
-			allocMem(memName,  blockSize);
+			if (blockSize != -1) {
+				String memName = "Job " + memNum;
+				if (!allocMem(memName,  blockSize)) {
+					logCat.appendLog("Allocation unsuccessfully!");
+				}
+			}
 		}
 		if (event == memFrame.firstFreeButton) {
 			int jobNum = Constants.valueOfText(memFrame.firstFreeText);
-			String memName = "Job " + jobNum;
-			freeMem(memName);
-		}
-		if (event == memFrame.firstPackButton) {
-			if (blockList.size() == 1 && !blockList.getFirst().getUsed()) {
-				System.out.println("NO used");
-			} else {
-				Constants.pack(memFrame, blockList, type);
-				largestSize = Constants.getLargestSize(blockList);
+			if (jobNum != -1){
+				String memName = "Job " + jobNum;
+				freeMem(memName);
 			}
 		}
-//		if (event == memFrame.firstDemoButton)
+		if (event == memFrame.firstPackButton) {
+			if (!Constants.pack(memFrame, blockList, type)) {
+				JOptionPane.showMessageDialog(null, 
+						"Please allocte memory first",
+						"Error",
+						JOptionPane.WARNING_MESSAGE);
+			} else {
+				largestSize = Constants.getLargestSize(blockList);
+				System.out.println(largestSize);
+			}
+		}
+//		if (event == memFrame.firstDemoButton) {
 //			System.out.println("first demo button");
+//		}
+		if (event == memFrame.firstClearButton) {
+			Constants.clear(memFrame, blockList, type);
+		}
 		if (event == memFrame.firstLogButton) {
 			logCat.setVisible(true);
 		}
 	}
 
 	public void keyReleased(KeyEvent e) {
-		// TODO 添加回车事件 first-fit
 		initList();
 		Object event = e.getSource();
 		int keyCode = e.getKeyCode();
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.firstAllocText) {
 			int blockSize = Constants.valueOfText(memFrame.firstAllocText);
-			String memName = "Job " + memNum;
-			allocMem(memName,  blockSize);
+			if (blockSize != -1) {
+				String memName = "Job " + memNum;
+				if (!allocMem(memName,  blockSize)) {
+					logCat.appendLog("Allocate unsuccessfully!");
+				}
+			}
 		}
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.firstFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.firstFreeText);
@@ -77,9 +91,20 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	}
 	
 	public boolean allocMem(String name, int size) {
-		// TODO 分配失败
-		if (size > largestSize)
+		if (size > largestSize) {
+			JOptionPane.showMessageDialog(null, 
+					"Memory shortage, please try packing then allocate.",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
 			return false;
+		}
+		if (size < Constants.memLeast) {
+			JOptionPane.showMessageDialog(null, 
+					"Please allocate 10K at least.",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
 		
 		int i = 0;
 		MemBlock newBlock = null;
@@ -107,7 +132,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
-		logCat.appendLog("Alloc " + size + "K successfully!");
+		logCat.appendLog("Allocate " + size + "K successfully!");
 		logCat.setRate(usedSize / Constants.memSize);
 
 		memNum++;
@@ -132,7 +157,6 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			// i < blockList.size(), has next
 			if (i < blockList.size() - 1) {
 				nextBlock = blockList.get(i + 1);
-				// TODO 后继为空闲内存
 				if (!nextBlock.getUsed()){
 					freeBlock.size += nextBlock.size;
 					freeBlock.setBounds(2, freeBlock.beginY, Constants.blockWidth, freeBlock.size / Constants.factor);
@@ -145,7 +169,6 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			// i > 0, has previous
 			if (i > 0) {
 				preBlock = blockList.get(i - 1);
-				// TODO 前驱为空闲内存
 				if (!preBlock.getUsed()) {
 					preBlock.size += freeBlock.size;
 					preBlock.setBounds(2, preBlock.beginY, Constants.blockWidth, preBlock.size / Constants.factor );
@@ -154,8 +177,12 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 				}
 			}
 		} else {
-			// TODO 检车输入正确的内存块号
-			System.out.println("free block == null");
+			JOptionPane.showMessageDialog(null, 
+					"NO " + name + "!",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			logCat.appendLog("Free unsuccessfully!");
+			return;
 		}
 		
 		// Get the largest size that hasn't used

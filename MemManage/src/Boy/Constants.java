@@ -1,24 +1,21 @@
 package Boy;
 
+//Constants.java -- Definition of constants
 import java.awt.*;
 import java.util.*;
-// Constants.java -- Definition of constants
-
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class Constants {
 	static int memSize = 640;
-	static int factor = 2;
+	static int factor = 1;
+	static int memLeast = 10;
 	
-	//static int firstBlockX = 100;
-	//static int bestBlockX = 500;
+	static int blockWidth = 270;
 	
-	static int blockWidth = 200;
-	
-	static Dimension mainFrame = new Dimension(800, 600);
+	static Dimension mainFrame = new Dimension(1000, 720);
 	static Dimension logCatFrame = new Dimension(300, 500);
-	static Rectangle firstPaneRec = new Rectangle(98, 58, 204, 324);
-	static Rectangle bestPaneRec = new Rectangle(498, 58, 204, 324);
+	static Rectangle firstPaneRec = new Rectangle(18, 8, blockWidth + 4, 644);
+	static Rectangle bestPaneRec = new Rectangle(518, 8, blockWidth + 4, 644);
 	
 	enum Type {FIRST_FIT, BEST_FIT};
 	
@@ -26,14 +23,13 @@ public class Constants {
 	public static int valueOfText(JTextField TF) {
 		int value = 0;
 		try {
-			if (TF.getText().toString().equals("")) {
-				System.out.println("It's black");
-				value = -1;
-			}
 			value = Integer.valueOf(TF.getText().toString());
 		} catch (NumberFormatException e) {
-			// TODO 处理输入非数字的异常
-			System.out.println("请输入数字");
+			JOptionPane.showMessageDialog(null, 
+					"Please input a number",
+					"Error",
+					JOptionPane.WARNING_MESSAGE);
+			value = -1;
 		}
 		return value;
 	}
@@ -51,6 +47,10 @@ public class Constants {
 	
 	// Pack algorithm
 	public static boolean pack(MemFrame memFrame, LinkedList<MemBlock> list, Type type) {
+		if (list.size() == 1 && !list.getFirst().getUsed()) {
+			return false;
+		}
+		
 		MemBlock firstBlock = list.getFirst();
 		// If the first block is free, make the second block be the first
 		if (!firstBlock.getUsed()) {
@@ -100,7 +100,7 @@ public class Constants {
 			lastBlock.setBounds(2, currentPos, blockWidth, lastBlock.size / factor);
 			currentPos += lastBlock.size / factor;
 			
-			MemBlock freeBlock = new MemBlock("free", 2 * (322 - currentPos));
+			MemBlock freeBlock = new MemBlock("free", factor * (memSize + 2 - currentPos));
 			freeBlock.beginY = currentPos;
 			freeBlock.setBounds(2, freeBlock.beginY, blockWidth, freeBlock.size / factor);
 			freeBlock.setUsed(false);
@@ -114,7 +114,7 @@ public class Constants {
 				break;
 			}
 		} else {
-			lastBlock.size = 2 * (322 - currentPos);
+			lastBlock.size = factor * (memSize + 2 - currentPos);
 			lastBlock.beginY = currentPos;
 			lastBlock.setBounds(2, lastBlock.beginY, blockWidth, lastBlock.size / factor);
 		}
@@ -128,5 +128,19 @@ public class Constants {
 		}
 
 		return true;
+	}
+	
+	public static void clear(MemFrame memFrame, LinkedList<MemBlock> list, Type type) {
+		switch (type) {
+		case FIRST_FIT:
+			list.clear();
+			memFrame.firstFit.initList();
+			memFrame.firstFit.logCat.appendLog("Clear!");
+			break;
+		case BEST_FIT:
+			list.clear();
+			memFrame.bestFit.initList();
+			memFrame.bestFit.logCat.appendLog("Clear!");
+		}
 	}
 }
