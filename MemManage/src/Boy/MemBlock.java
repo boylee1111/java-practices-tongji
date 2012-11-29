@@ -1,5 +1,6 @@
 package Boy;
 
+// MemBlock.java -- Implements the every block in memory panel
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EtchedBorder;

@@ -1,9 +1,11 @@
 package Boy;
 
+// CtrlBestFit.java -- Implements the best-fit algorithms
 import java.util.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
-import Boy.Constants.Type;
+import Boy.Constants.AlgoType;
 
 public class CtrlBestFit implements ActionListener, KeyListener {
 	private LinkedList<MemBlock> blockList;
@@ -12,11 +14,13 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 	
 	MemLogCat logCat = null;
 	
-	Constants.Type type = Type.BEST_FIT;
+	private AlgoType type = AlgoType.BEST_FIT;
 	
-	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
+	// Number of every memory, the most size in memory
 	private int memNum, largestSize;
 	private float usedSize;
+	
+	private Scanner scanner = null;
 	
 	public CtrlBestFit(MemFrame memFrame) {
 		this.memFrame = memFrame;
@@ -25,6 +29,8 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		largestSize = Constants.memSize;
 		blockList = new LinkedList<MemBlock>();
 		logCat = new MemLogCat();
+		logCat.type = AlgoType.BEST_FIT;
+		logCat.setLocation(1010, 10);
 		logCat.setTitle("Best-Fit LogCat");
 	}
 	
@@ -57,14 +63,29 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				largestSize = Constants.getLargestSize(blockList);
 			}
 		}
-		// TODO 演示
 		if (event == memFrame.bestDemoButton) {
-			System.out.println("best demo button");
+			try {
+				Constants.clear(memFrame, blockList, type);
+				largestSize = Constants.memSize;
+				usedSize = memNum = 0;
+				logCat.setRate(0.0f);
+				initList();
+				scanner = new Scanner(new File(".\\Resource\\Task.txt"));
+				scanner.useDelimiter(System.getProperty("line.separator"));
+				Demo();
+			} catch (FileNotFoundException fileE) {
+				JOptionPane.showMessageDialog(null, 
+						"File can't find, please check",
+						"Error",
+						JOptionPane.WARNING_MESSAGE);
+			}
 		}
 		if (event == memFrame.bestClearButton) {
 			Constants.clear(memFrame, blockList, type);
-			largestSize = Constants.getLargestSize(blockList);
+			largestSize = Constants.memSize;
+			usedSize = memNum = 0;
 			logCat.setRate(0.0f);
+			initList();
 		}
 		if (event == memFrame.bestLogButton) {
 			logCat.setVisible(true);
@@ -86,11 +107,14 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		}
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.bestFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.bestFreeText);
-			String memName = "Job#" + jobNum;
-			freeMem(memName);
+			if (jobNum != -1){
+				String memName = "Job#" + jobNum;
+				freeMem(memName);
+			}
 		}
 	}
 	
+	// Best-fit algorithm
 	private boolean allocMem(String name, int size) {
 		if (size > largestSize) {
 			JOptionPane.showMessageDialog(null, 
@@ -144,6 +168,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		return true;
 	}
 
+	// Free memory block
 	private void freeMem(String name) {
 		MemBlock freeBlock = null;
 		for (Iterator<MemBlock> it = blockList.iterator(); it.hasNext();) {
@@ -206,6 +231,54 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		}
 	}
 
+	private void Demo() {
+		Thread bestDemo = new Thread(new Runnable() {
+			private Scanner lineScanner = null;
+
+			public void run() {
+				memFrame.bestDemoButton.setEnabled(false);
+				memFrame.bestPackButton.setEnabled(false);
+				memFrame.bestClearButton.setEnabled(false);
+				memFrame.bestAllocButton.setEnabled(false);
+				memFrame.bestFreeButton.setEnabled(false);
+				memFrame.bestAllocText.setEditable(false);
+				memFrame.bestFreeText.setEditable(false);
+				while (scanner.hasNext()) {
+					lineScanner  = new Scanner(scanner.next());
+					String name = lineScanner .next();
+					boolean allocOrFree = lineScanner .nextBoolean();
+					int size = lineScanner .nextInt();
+
+					if (allocOrFree) {
+						if (!allocMem(name,  size)) {
+							logCat.appendLog("Allocation unsuccessfully!");
+						}
+					} else {
+						freeMem(name);
+					}
+
+					try {
+						Thread.currentThread();
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				memFrame.bestDemoButton.setEnabled(true);
+				memFrame.bestPackButton.setEnabled(true);
+				memFrame.bestClearButton.setEnabled(true);
+				memFrame.bestAllocButton.setEnabled(true);
+				memFrame.bestFreeButton.setEnabled(true);
+				memFrame.bestAllocText.setEditable(true);
+				memFrame.bestFreeText.setEditable(true);
+				logCat.appendLog("Best-Fit demo compelete!");
+				scanner.close();
+				scanner = null;
+			}
+		});
+		bestDemo.start();
+	}
+	
 	public void keyPressed(KeyEvent e) {
 
 	}

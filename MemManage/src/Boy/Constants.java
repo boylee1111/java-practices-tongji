@@ -1,23 +1,27 @@
 package Boy;
 
-//Constants.java -- Definition of constants
+// Constants.java -- Definition of constants
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 
 public class Constants {
+	// The total memory, factor of the size, the least memory can be allcated
 	static int memSize = 640;
 	static int factor = 1;
 	static int memLeast = 10;
 	
+	// Size of panel
 	static int blockWidth = 270;
 	
+	// Some definitions
 	static Dimension mainFrame = new Dimension(1000, 720);
 	static Dimension logCatFrame = new Dimension(300, 500);
 	static Rectangle firstPaneRec = new Rectangle(18, 8, blockWidth + 4, 644);
 	static Rectangle bestPaneRec = new Rectangle(518, 8, blockWidth + 4, 644);
 	
-	enum Type {FIRST_FIT, BEST_FIT};
+	// Enum used to judge which algorithm
+	enum AlgoType {FIRST_FIT, BEST_FIT};
 
 	// Get the integer value of text field
 	public static int valueOfText(JTextField TF) {
@@ -46,7 +50,7 @@ public class Constants {
 	}
 	
 	// Pack algorithm
-	public static boolean pack(MemFrame memFrame, LinkedList<MemBlock> list, Type type) {
+	public static boolean pack(MemFrame memFrame, LinkedList<MemBlock> list, AlgoType type) {
 		if (list.size() == 1 && !list.getFirst().getUsed()) {
 			return false;
 		}
@@ -130,14 +134,12 @@ public class Constants {
 		return true;
 	}
 	
-	// TODO ”–Œ Ã‚
-	public static void clear(MemFrame memFrame, LinkedList<MemBlock> list, Type type) {
+	public static void clear(MemFrame memFrame, LinkedList<MemBlock> list, AlgoType type) {
 		switch (type) {
 		case FIRST_FIT: {
 			for (Iterator<MemBlock> it = list.iterator(); it.hasNext();) {
 				MemBlock tmpBlock = (MemBlock)it.next();
 				memFrame.firstMemPane.remove(tmpBlock);
-				tmpBlock.setVisible(false);
 			}
 			list.clear();
 			memFrame.firstFit.logCat.appendLog("Clear!");

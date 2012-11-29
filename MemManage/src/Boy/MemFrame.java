@@ -1,4 +1,5 @@
 package Boy;
+
 // MemFrame.java -- Initialize the frame
 import java.awt.*;
 import java.awt.event.*;
@@ -44,6 +45,7 @@ public class MemFrame extends JFrame implements ActionListener {
 	public MemFrame() {
 		super("Memory Management");
 		this.setSize(Constants.mainFrame);
+		this.setLocation(150, 10);
 		
 		// Create menu bar, menus and menu items
 		menuBar = new JMenuBar();

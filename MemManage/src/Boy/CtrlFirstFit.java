@@ -1,10 +1,11 @@
 package Boy;
 
+// CtrlFirstFit.java -- Implements the first-fit algorithms
 import java.util.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
-import Boy.Constants.Type;
+import Boy.Constants.AlgoType;
 
 public class CtrlFirstFit implements ActionListener, KeyListener {
 	private LinkedList<MemBlock> blockList;
@@ -13,13 +14,13 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	
 	MemLogCat logCat = null;
 	
-	Constants.Type type = Type.FIRST_FIT;
+	private AlgoType type = AlgoType.FIRST_FIT;
 	
-	// blockSize块需要的内存   UsedSize已使用的内存  largestSize最大容量内存
+	// Number of every memory, the most size in memory
 	private int memNum, largestSize;
 	private float usedSize;
 	
-	Scanner scanner = null;
+	private Scanner scanner = null;
 
 	public CtrlFirstFit(MemFrame memFrame) {
 		this.memFrame = memFrame;
@@ -28,6 +29,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		largestSize = Constants.memSize;
 		blockList = new LinkedList<MemBlock>();
 		logCat = new MemLogCat();
+		logCat.type = AlgoType.FIRST_FIT;
+		logCat.setLocation(10, 10);
 		logCat.setTitle("First-Fit LogCat");
 	}
 
@@ -63,6 +66,11 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		}
 		if (event == memFrame.firstDemoButton) {
 			try {
+				Constants.clear(memFrame, blockList, type);
+				largestSize = Constants.memSize;
+				usedSize = memNum = 0;
+				logCat.setRate(0.0f);
+				initList();
 				scanner = new Scanner(new File(".\\Resource\\Task.txt"));
 				scanner.useDelimiter(System.getProperty("line.separator"));
 				Demo();
@@ -74,11 +82,11 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 			}
 		}
 		if (event == memFrame.firstClearButton) {
-//			Constants.clear(memFrame, blockList, type);
-//			largestSize = Constants.memSize;
-//			usedSize = 0;
-//			memNum = 0;
-//			logCat.setRate(0.0f);
+			Constants.clear(memFrame, blockList, type);
+			largestSize = Constants.memSize;
+			usedSize = memNum = 0;
+			logCat.setRate(0.0f);
+			initList();
 		}
 		if (event == memFrame.firstLogButton) {
 			logCat.setVisible(true);
@@ -100,11 +108,14 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		}
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.firstFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.firstFreeText);
-			String memName = "Job#" + jobNum;
-			freeMem(memName);
+			if (jobNum != -1){
+				String memName = "Job#" + jobNum;
+				freeMem(memName);
+			}
 		}
 	}
 	
+	// Best-fit algorithm
 	public boolean allocMem(String name, int size) {
 		if (size > largestSize) {
 			JOptionPane.showMessageDialog(null, 
@@ -154,6 +165,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		return true;
 	}
 	
+	// Free memory block
 	public void freeMem(String name) {
 		MemBlock freeBlock = null;
 		for (Iterator<MemBlock> it = blockList.iterator(); it.hasNext();) {
@@ -205,17 +217,35 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		logCat.appendLog("Free " + name + " successfully!");
 		logCat.setRate(usedSize / Constants.memSize);
 	}
+	  
+	// Initialize list
+	public void initList() {
+		if (blockList.isEmpty()) {
+			MemBlock firstBlock = new MemBlock("free", largestSize);
+			firstBlock.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
+			blockList.add(firstBlock);
+			memFrame.firstMemPane.add(firstBlock);
+		}
+	}
 
-	// TODO新建一个类
 	private void Demo() {
 		Thread firstDemo = new Thread(new Runnable() {
+			private Scanner lineScanner = null;
+
 			public void run() {
+				memFrame.firstDemoButton.setEnabled(false);
+				memFrame.firstPackButton.setEnabled(false);
+				memFrame.firstClearButton.setEnabled(false);
+				memFrame.firstAllocButton.setEnabled(false);
+				memFrame.firstFreeButton.setEnabled(false);
+				memFrame.firstAllocText.setEditable(false);
+				memFrame.firstFreeText.setEditable(false);
 				while (scanner.hasNext()) {
-					Scanner lineScanner = new Scanner(scanner.next());
-					String name = lineScanner.next();
-					boolean allocOrFree = lineScanner.nextBoolean();
-					int size = lineScanner.nextInt();
-					
+					lineScanner  = new Scanner(scanner.next());
+					String name = lineScanner .next();
+					boolean allocOrFree = lineScanner .nextBoolean();
+					int size = lineScanner .nextInt();
+
 					if (allocOrFree) {
 						if (!allocMem(name,  size)) {
 							logCat.appendLog("Allocation unsuccessfully!");
@@ -231,20 +261,19 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 						e.printStackTrace();
 					}
 				}
+				memFrame.firstDemoButton.setEnabled(true);
+				memFrame.firstPackButton.setEnabled(true);
+				memFrame.firstClearButton.setEnabled(true);
+				memFrame.firstAllocButton.setEnabled(true);
+				memFrame.firstFreeButton.setEnabled(true);
+				memFrame.firstAllocText.setEditable(true);
+				memFrame.firstFreeText.setEditable(true);
+				logCat.appendLog("First-Fit demo compelete!");
 				scanner.close();
+				scanner = null;
 			}
 		});
 		firstDemo.start();
-	}
-	  
-	// Initialize list
-	public void initList() {
-		if (blockList.isEmpty()) {
-			MemBlock firstBlock = new MemBlock("free", largestSize);
-			firstBlock.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
-			blockList.add(firstBlock);
-			memFrame.firstMemPane.add(firstBlock);
-		}
 	}
 	
 	public void keyPressed(KeyEvent e) {
