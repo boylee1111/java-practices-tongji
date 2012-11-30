@@ -19,6 +19,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	// Number of every memory, the most size in memory
 	private int memNum, largestSize;
 	private float usedSize;
+	private boolean isDemo;
 	
 	private Scanner scanner = null;
 
@@ -26,6 +27,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 		this.memFrame = memFrame;
 		memNum = 0;
 		usedSize = 0;
+		isDemo = false;
 		largestSize = Constants.memSize;
 		blockList = new LinkedList<MemBlock>();
 		logCat = new MemLogCat();
@@ -61,7 +63,6 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 						JOptionPane.WARNING_MESSAGE);
 			} else {
 				largestSize = Constants.getLargestSize(blockList);
-				System.out.println(largestSize);
 			}
 		}
 		if (event == memFrame.firstDemoButton) {
@@ -94,6 +95,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	}
 
 	public void keyReleased(KeyEvent e) {
+		if (isDemo)
+			return;
 		initList();
 		Object event = e.getSource();
 		int keyCode = e.getKeyCode();
@@ -105,6 +108,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 					logCat.appendLog("Allocate unsuccessfully!");
 				}
 			}
+			
 		}
 		if (keyCode == KeyEvent.VK_ENTER && event == memFrame.firstFreeText) {
 			int jobNum = Constants.valueOfText(memFrame.firstFreeText);
@@ -229,6 +233,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 	}
 
 	private void Demo() {
+		isDemo = true;
 		Thread firstDemo = new Thread(new Runnable() {
 			private Scanner lineScanner = null;
 
@@ -271,6 +276,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 				logCat.appendLog("First-Fit demo compelete!");
 				scanner.close();
 				scanner = null;
+				isDemo = false;
 			}
 		});
 		firstDemo.start();

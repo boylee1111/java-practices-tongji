@@ -15,10 +15,14 @@ public class Constants {
 	static int blockWidth = 270;
 	
 	// Some definitions
-	static Dimension mainFrame = new Dimension(1000, 720);
 	static Dimension logCatFrame = new Dimension(300, 500);
-	static Rectangle firstPaneRec = new Rectangle(18, 8, blockWidth + 4, 644);
-	static Rectangle bestPaneRec = new Rectangle(518, 8, blockWidth + 4, 644);
+	static Rectangle firstPaneRec = new Rectangle(18, 8, blockWidth + 4, memSize / factor + 4);
+	static Rectangle bestPaneRec = new Rectangle(518, 8, blockWidth + 4, memSize / factor + 4);
+	static Rectangle firstCtrlPaneRec = new Rectangle(295, 450, 200, 80);
+	static Rectangle bestCtrlPaneRec = new Rectangle(795, 450, 200, 80);
+	
+	static Dimension mainFrame = new Dimension(1000,
+			(firstPaneRec.height > firstCtrlPaneRec.y + firstCtrlPaneRec.height ? firstPaneRec.height : (firstCtrlPaneRec.y + firstCtrlPaneRec.height)) + 70);
 	
 	// Enum used to judge which algorithm
 	enum AlgoType {FIRST_FIT, BEST_FIT};

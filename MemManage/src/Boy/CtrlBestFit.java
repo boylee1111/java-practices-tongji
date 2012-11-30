@@ -19,6 +19,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 	// Number of every memory, the most size in memory
 	private int memNum, largestSize;
 	private float usedSize;
+	private boolean isDemo;
 	
 	private Scanner scanner = null;
 	
@@ -26,6 +27,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		this.memFrame = memFrame;
 		memNum = 0;
 		usedSize = 0;
+		isDemo = false;
 		largestSize = Constants.memSize;
 		blockList = new LinkedList<MemBlock>();
 		logCat = new MemLogCat();
@@ -93,6 +95,8 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 	}
 
 	public void keyReleased(KeyEvent e) {
+		if (isDemo)
+			return;
 		initList();
 		Object event = e.getSource();
 		int keyCode = e.getKeyCode();
@@ -232,6 +236,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 	}
 
 	private void Demo() {
+		isDemo = true;
 		Thread bestDemo = new Thread(new Runnable() {
 			private Scanner lineScanner = null;
 
@@ -274,6 +279,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				logCat.appendLog("Best-Fit demo compelete!");
 				scanner.close();
 				scanner = null;
+				isDemo = false;
 			}
 		});
 		bestDemo.start();
