@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>The Alloy Look&amp;Feel - Customizing Fonts</title>
+                           
+  <meta name="Author" content="INCORS GmbH">
+               
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+               
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+  <body>
+             
+<h2>Customizing Fonts</h2>
+                        
+<p>To customize the fonts that are used by the Alloy Look&amp;Feels for displaying
+   text on components the interface <code>com.incors.plaf.alloy.AlloyFontTheme</code>
+   is provided.&nbsp; It defines methods for retrieving the fonts that should
+   be used by the Alloy Look&amp;Feel. The API for the interface&nbsp;<code>com.incors.plaf.alloy.AlloyFontTheme</code>
+   can be found <a href="api/com/incors/plaf/alloy/AlloyFontTheme.html">here</a>. 
+  <br>
+      </p>
+           
+<p>Each theme for the Alloy Look&amp;Feel should provide a constructor that 
+   takes an instance of <code>com.incors.plaf.alloy.AlloyFontTheme</code> 
+as  an argument. So if you have an instance of a class that implements the 
+interface  <code>com.incors.plaf.alloy.AlloyFontTheme</code>, you can use 
+it like shown  below (with the Glass theme).</p>
+           
+<table border="0" width="100%" cellpadding="2" cellspacing="2">
+       <tbody>
+          <tr>
+            <td bgcolor="#ebe9e7"><code>/* myFontTheme is an instance of
+a  class  that implements AlloyFontTheme */<br>
+     com.incors.plaf.alloy.themes.glass.GlassTheme glassTheme = new com.incors.plaf.alloy.themes.glass.GlassTheme(myFontTheme);</code></td>
+          </tr>
+                         
+  </tbody>      
+</table>
+      <br>
+             
+<h3>The Class <code>CustomFontTheme</code></h3>
+           
+<p>One class that implements this interface is <code>com.incors.plaf.alloy.themes.CustomFontTheme</code>,
+   which was created to make the customization of fonts as easy as possible<code></code>.
+   Its API can be found <a
+ href="api/com/incors/plaf/alloy/themes/CustomFontTheme.html">here</a>. When 
+  creating an instance of <code>com.incors.plaf.alloy.themes.CustomFontTheme</code>
+   you can propose an array of font names and the font sizes that should
+be   used by the look and feel. The object will then try to find one of the
+proposed    fonts on the system. If no font is found, the system font <i>Dialog</i>
+ will be  used as a fallback font.</p>
+              
+<p>This example below shows how the class <code>com.incors.plaf.alloy.themes.CustomFontTheme</code>
+   can be used with the Acid theme (usage with other themes is basically
+the    same):</p>
+                       
+<table border="0" width="100%" cellpadding="2" cellspacing="2">
+       <tbody>
+          <tr>
+            <td bgcolor="#ebe9e7"><code>com.incors.plaf.alloy.themes.CustomFontTheme
+   myFontTheme = new com.incors.plaf.alloy.themes.CustomFontTheme(new String[]
+   {"Tahoma", "Verdana", "Helvetica"}, 12, 10);<br>
+      com.incors.plaf.alloy.themes.acid.AcidTheme acidTheme = new com.incors.plaf.alloy.themes.acid.AcidTheme(myFontTheme);<br>
+      com.incors.plaf.alloy.AlloyLookAndFeel alloyLnF = new com.incors.plaf.alloy.AlloyLookAndFeel(acidTheme);</code><code></code></td>
+          </tr>
+                           
+  </tbody>      
+</table>
+      <br>
+  Note: If you want to use a serif font (like <i>Times New Roman</i>) for 
+the Alloy Look&amp;Feel it might be a good idea to add <i>Serif</i> to the 
+array of proposed font names. This font is a Java&#8482; system font and always 
+available, so it is a good fallback solution for this case.<br>
+  <br>
+           
+<h3>Custom Implementations of <code>AlloyFontTheme</code></h3>
+           
+<p>To create your own implementation of <code>com.incors.plaf.alloy.AlloyFontTheme</code>
+   you should first take a look at its API, which can be found <a
+ href="api/AlloyFontTheme.html">here</a>. The class <code>HelveticaFontTheme</code>
+   is an example that shows how an implementation of the interface&nbsp;<code>com.incors.plaf.alloy.AlloyFontTheme</code>
+   could look like. Note that this class is only for demonstration. You will
+   not find it in the Alloy Look&amp;Feel distribution.<br>
+      <br>
+      </p>
+       <code></code>  
+<table cellpadding="2" cellspacing="2" border="0" width="100%"
+ bgcolor="#ebe9e7">
+    <tbody>
+      <tr>
+        <td valign="top"><code>import java.awt.Font;<br>
+       import javax.swing.plaf.FontUIResource;<br>
+       import com.incors.plaf.alloy.AlloyFontTheme;<br>
+       <br>
+       public class HelveticaFontTheme {<br>
+       &nbsp; private FontUIResource controlTextFont;<br>
+       &nbsp; private FontUIResource systemTextFont;<br>
+       &nbsp; private FontUIResource menuTextFont;<br>
+       &nbsp; private FontUIResource userTextFont;<br>
+       &nbsp; private FontUIResource windowTitleFont;<br>
+       &nbsp; private FontUIResource subTextFont;<br>
+       &nbsp; <br>
+       &nbsp; public FontUIResource getControlTextFont() {<br>
+       &nbsp;&nbsp;&nbsp; if (controlTextFont == null) {<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; controlTextFont = new FontUIResource(new
+   Font("Tahoma", Font.PLAIN, 12));<br>
+       &nbsp;&nbsp;&nbsp; }<br>
+       &nbsp;&nbsp;&nbsp; return controlTextFont;<br>
+       &nbsp; }<br>
+       <br>
+       &nbsp; public FontUIResource getSystemTextFont() {<br>
+       &nbsp;&nbsp;&nbsp; if (systemTextFont == null) {<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; systemTextFont = new FontUIResource(new 
+  Font("Tahoma", Font.PLAIN, 12));<br>
+       &nbsp;&nbsp;&nbsp; }<br>
+       &nbsp;&nbsp;&nbsp; return systemTextFont;<br>
+       &nbsp; }<br>
+       <br>
+       &nbsp; public FontUIResource getMenuTextFont() {<br>
+       &nbsp;&nbsp;&nbsp; if (menuTextFont == null) {<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; menuTextFont = new FontUIResource(new 
+ Font("Tahoma",  Font.BOLD, 12));<br>
+       &nbsp;&nbsp;&nbsp; }<br>
+       &nbsp;&nbsp;&nbsp; return menuTextFont;<br>
+       &nbsp; }<br>
+       <br>
+       &nbsp; public FontUIResource getUserTextFont() {<br>
+       &nbsp;&nbsp;&nbsp; if (userTextFont == null) {<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; userTextFont = new FontUIResource(new 
+ Font("Tahoma",  Font.PLAIN, 12));<br>
+       &nbsp;&nbsp;&nbsp; }<br>
+       &nbsp;&nbsp;&nbsp; return userTextFont;<br>
+       &nbsp; }<br>
+       <br>
+       &nbsp; public FontUIResource getWindowTitleFont() {<br>
+       &nbsp;&nbsp;&nbsp; if (windowTitleFont == null) {<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; windowTitleFont = new FontUIResource(new
+   Font("Tahoma", Font.BOLD, 12));<br>
+       &nbsp;&nbsp;&nbsp; }<br>
+       &nbsp;&nbsp;&nbsp; return windowTitleFont;<br>
+       &nbsp; }<br>
+       <br>
+       &nbsp; public FontUIResource getSubTextFont() {<br>
+       &nbsp;&nbsp;&nbsp; if (subTextFont == null) {<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; subTextFont = new FontUIResource(new
+ Font("Tahoma",   Font.PLAIN, 10));<br>
+       &nbsp;&nbsp;&nbsp; }<br>
+       &nbsp;&nbsp;&nbsp; return subTextFont;<br>
+       &nbsp; }<br>
+       &nbsp; <br>
+       }</code><br>
+            </td>
+          </tr>
+                       
+  </tbody>      
+</table>
+      <br>
+                   
+<h3>Things to keep in mind<br>
+      </h3>
+           
+<p>Some hints for implementing custom font themes:</p>
+             
+<ul>
+         <li>Keep in mind that on different systems different fonts are installed.</li>
+         <li>Most fonts can only display Latin characters. Keep this in mind
+  if  you     are planning to provide localized versions of your software
+that  have to     display other characters, e.g. Cyrillic or Chinese characters.</li>
+             
+</ul>
+         <br>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>The Alloy Look&amp;Feel - Other Usages</title>
+  <meta name="Author" content="INCORS GmbH">
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+<body>
+<h2>Other Usages<br>
+</h2>
+<h3> </h3>
+<h3><a name="Default_Look_and_Feel"></a>Setting the Alloy Look&amp;Feel
+as a JRE's Default Look&amp;Feel</h3>
+Making the Alloy Look&amp;Feel the default look and feel of your Java&#8482;
+Runtime Environment is quite easy. <br>
+<br>
+First you have to put the file <i>alloy.jar</i> into the folder <i>/lib/ext</i>
+of your JRE. Then you have to create a properties file with the name
+alloy.properties, which contains at least the license code
+property. The file <i>alloy.properties</i> is a simple text file which
+contains this one line of text:<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#ebe9e7"><code>alloy.licenseCode=[license
+Code]</code><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+where <i>[license Code]</i> must be replaced by your license code.
+This file must be put into a jar archive. You can use the jar utility
+that comes with the JDK or simply create a zip archive with your
+favorite zip tool, add the properties file to the zip archive and
+replace the .zip suffix of the archive with .jar. This jar has to be
+put into the folder <i>/lib/ext</i> of your JRE, too. It does not
+matter which name you give to the jar archive that contains the
+alloy properties file, as long as it ends with <i>.jar </i>. To
+make it clear what is inside the jar we usually call it <i>alloyProperties.jar</i>.<br>
+<br>
+The last thing you need to do is to create another properties file,
+with the name <i>swing.properties </i>. This file is also a simple
+text file which contains the following text:<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#ebe9e7"><code>swing.installedlafs =
+motif,windows,metal,mac,alloy <br>
+swing.installedlaf.motif.name = CDE/Motif <br>
+swing.installedlaf.motif.class =
+com.sun.java.swing.plaf.motif.MotifLookAndFeel <br>
+swing.installedlaf.windows.name = Windows <br>
+swing.installedlaf.windows.class =
+com.sun.java.swing.plaf.windows.WindowsLookAndFeel <br>
+swing.installedlaf.metal.name = Metal <br>
+swing.installedlaf.metal.class =
+javax.swing.plaf.metal.MetalLookAndFeel <br>
+swing.installedlaf.mac.name = Mac <br>
+swing.installedlaf.mac.class =
+com.sun.java.swing.plaf.mac.MacLookAndFeel <br>
+swing.installedlaf.alloy.name = Alloy <br>
+swing.installedlaf.alloy.class = com.incors.plaf.alloy.AlloyLookAndFeel<br>
+swing.defaultlaf=com.incors.plaf.alloy.AlloyLookAndFeel</code><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<code></code>The file <i>swing.properties</i> has to be put into the
+folder <i>/lib</i> of your JRE.<br>
+<br>
+If you followed these instructions, Swing applications that run on your
+JRE should now use the Alloy Look&amp;Feel as their default look and
+feel.<br>
+<br>
+<h3>Using the Alloy Look&amp;Feel with IntelliJ IDEA</h3>
+To use the Alloy Look&amp;Feel with IntelliJ IDEA you will first have
+to find the JRE that is being used by&nbsp;IntelliJ IDEA on your
+system. By default the used JRE can be found in the subfolder /jre of
+the IntelliJ IDEA program folder. Add the Alloy Look&amp;Feel to that
+JRE as described in the section <a href="#Default_Look_and_Feel">"Setting
+the Alloy Look&amp;Feel as an JRE's Default Look&amp;Feel"</a>. Then
+start IDEA and select Alloy from the combo box in
+Options-&gt;IDE-Settings-&gt;Appearance-&gt;Look And Feel.<br>
+<br>
+<h3>Using the Alloy Look&amp;Feel with Netbeans</h3>
+To use the the Alloy Look&amp;Feel with netbeans all you have to do is
+to follow these two steps:<br>
+<ol>
+  <li>Put the file <i>alloy.jar</i> into the <i>lib/ext/</i> folder
+of
+netbeans.</li>
+  <li>Add the following to the text of the file <i>ide.cfg</i>, which
+is located in the <i>bin/</i> folder of netbeans (if the file <i>ide.cfg</i>
+does not exist, simply create an empty text file with that name).<code><br>
+    <br>
+-ui com.incors.plaf.alloy.AlloyLookAndFeel
+-J-Dalloy.licenseCode=[license code]</code><br>
+    <br>
+The part <i>[license code]</i> must be replaced by your license code.
+Please be aware that the license code cannot be put in quotation
+marks, because netbeans does not recognize them properly.</li>
+</ol>
+That all you have to do. Netbeans should now use the Alloy
+Look&amp;Feel as the default look and feel.<br>
+<br>
+<h3>Using the Alloy Look&amp;Feel with JBuilder</h3>
+To use the Alloy Look&amp;Feel with JBuilder you will first have to
+find the JRE that is being used by JBuilder on your computer. By
+default the used JRE is located in the JBuilder program folder (there
+is no /jre folder, only /lib and /bin). Add the Alloy Look&amp;Feel to
+that JRE as described in the section <a href="#Default_Look_and_Feel">"Setting
+the Alloy Look&amp;Feel as an JRE's Default Look&amp;Feel"</a>. Then
+start JBuilder and set the look and feel in Tools-&gt;IDE
+Options-&gt;Browser-&gt;Look and Feel.<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

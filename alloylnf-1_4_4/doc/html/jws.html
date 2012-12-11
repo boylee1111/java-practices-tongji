@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>The Alloy Look&amp;Feel - Java(tm) WebStart</title>
+      
+  <meta name="Author" content="INCORS GmbH">
+   
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+   
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+  <body>
+         
+<h2>Using the Alloy Look&amp;Feel with Java&#8482; WebStart</h2>
+     There are some special issues that you have to remember when using the 
+ Alloy  Look&amp;Feel with a Java&#8482; WebStart enabled application.<br>
+     <br>
+         
+<h3>The Classloader issue</h3>
+    There is an issue with the class loader that occurs with all custom look
+  and feels. Fortunately it can be solved easily.<br>
+    <br>
+    To use the Alloy Look&amp;Feel in a Java&#8482; WebStart application you will 
+ have to set the class loader, which is very simple to do. Here is an example:<br>
+     <br>
+       
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+      <tbody>
+        <tr>
+          <td valign="top" bgcolor="#ebe9e7"><code> try {<br>
+      &nbsp; javax.swing.LookAndFeel alloyLnF = new com.incors.plaf.alloy.AlloyLookAndFeel();&nbsp;&nbsp;&nbsp; 
+        <br>
+      &nbsp; javax.swing.UIManager.setLookAndFeel(alloyLnF);<br>
+      } catch (javax.swing.UnsupportedLookAndFeelException ex) {<br>
+      &nbsp; // You may handle the exception here<br>
+      }<br>
+      // this line needs to be implemented in order to make JWS work properly<br>
+      javax.swing.UIManager.getLookAndFeelDefaults().put("ClassLoader", getClass().getClassLoader());</code><br>
+          </td>
+        </tr>
+               
+  </tbody>    
+</table>
+    <code></code><br>
+     The last line in the code is one that does the trick by setting the
+classloader   for the look and feel to the classloader of the class that
+contains the code.  You might have to change <code>getClass()</code> to <code>MyClass.class</code>
+  (where <code>MyClass</code> has to be replaced by the actual class name)
+ if you have to put the code into a static method. <br>
+     <br>
+         
+<h3>Running your application in the sandbox</h3>
+     If you are running your application as an untrusted application in the 
+ Java  WebStart sandbox you should set the property <code>isSandbox</code> 
+ to <code>true</code>.  Otherwise you will run into problems when you are 
+using a <code>FileOpenService</code>  or a <code>FileSaveService</code>. Refer
+to the <a href="properties.html">section about properties</a> to learn how
+to set the property.<br>
+     <br>
+     Note that you only should set the property <code>isSandbox</code> to 
+<code>true</code>   if your application is really running in the sandbox. 
+For Web Start applications that are not running in a sandbox, the property 
+should not be set.<br>
+     <br>
+     <br>
+     <br>
+     <br>
+     <br>
+  <br>
+ 
+</body>
+</html>

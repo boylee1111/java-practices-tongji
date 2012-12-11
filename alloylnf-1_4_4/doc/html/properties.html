@@ -1,0 +1,231 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>The Alloy Look&amp;Feel - Properties</title>
+  <meta name="Author" content="INCORS GmbH">
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+<body>
+<h2>Properties</h2>
+Since version 1.1 the Alloy Look&amp;Feel allows the use of properties.
+Currently properties can be used for setting the license code, the
+default theme, the frame decoration style, and to indicate if the
+application is running in a sandbox.    We intend to add more properties
+for customization  of the Alloy Look&amp;Feel   in future.<br>
+<br>
+<h3>Supported Properties</h3>
+<p> Currently supported properties are:</p>
+<br>
+<table cellpadding="2" cellspacing="2" border="1" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top" align="center" bgcolor="#ebe9e7"><b>Property
+Name</b><br>
+      </td>
+      <td valign="top" align="center" bgcolor="#ebe9e7"><b>Description</b><br>
+      </td>
+      <td valign="top" align="center" bgcolor="#ebe9e7"><b>Possible
+Values</b><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.licenseCode</code><br>
+      </td>
+      <td valign="top">- your license code for using the Alloy
+Look&amp;Feel<br>
+- must be set before instantiating the Alloy Look&amp;Feel
+      <p> </p>
+      </td>
+      <td valign="top"><br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.theme</code><br>
+      </td>
+      <td valign="top">- the theme that should be used by the Alloy
+Look&amp;Feel by default<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td valign="top"><code>default</code> (default value) the  Default
+theme<br>
+      <code>bedouin</code> the Bedouin theme<br>
+      <code>glass</code> the Glass theme<br>
+      <code>acid</code> the Acid theme<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.isSandbox</code><br>
+      </td>
+      <td valign="top">indicates if the applications is running  in  a
+Java WebStart sandbox
+      <p> </p>
+      </td>
+      <td valign="top"><code>true</code> for applications that are
+running in a Java WebStart sandbox<br>
+      <code>false</code> (default value) for normal applications  and
+for trusted Java   WebStart  applications<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.isLookAndFeelFrameDecoration</code><br>
+      </td>
+      <td valign="top">- indicates if&nbsp; decorations that match the
+Alloy Look&amp;Feel should be used for frames and dialogs<br>
+- will be ignored for JRE versions older than 1.4<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td valign="top"><code>true</code> use decorations provided by the
+ Alloy Look&amp;Feel for frames and dialogs<br>
+      <code>false</code> (default value) use decorations provided by the
+ operating system for frames and dialogs<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.isPopupShadowEffectEnabled</code><br>
+      </td>
+      <td valign="top">-indicates if menus, popup menus and the combo
+box popup should drop a small shadow<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td valign="top"><code>true</code> (default value) drop shadows<br>
+      <code>false</code> drop no shadows<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.isButtonPulseEffectEnabled</code><br>
+      </td>
+      <td valign="top">-indicates if a pulse effect should be used to
+indicate the default button<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td valign="top"><code>true</code> (default value) use pulse effect<br>
+      <code>false</code> do not use pulse effect<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.isToolbarEffectsEnabled</code><br>
+      </td>
+      <td valign="top">- indicates if the rollover and shadow effects
+for buttons and toggle buttons on toolbars should be used<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td valign="top"><code>true</code> (default value) use rollover
+and shadow effects<br>
+      <code>false</code> do not use rollover and shadow effects<br>
+      </td>
+    </tr>
+    <tr>
+      <td valign="top"><code>alloy.frameButtonStyle</code><br>
+      </td>
+      <td valign="top">- indicates which button style should be used
+for frame buttons<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td valign="top"><code>modern</code> (default value) use new
+button style (sqare plastic style)<br>
+      <code>classic</code> use old style (round glass style)<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><code>alloy.menuLayoutStyle</code><br>
+      </td>
+      <td style="vertical-align: top;">- indicates if for standard menu
+items in a menu an empty space should be provided in order to align them
+with check box and radio menu items<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td style="vertical-align: top;"><code>noAdjustment</code> does
+not provide space at left<br>
+      <code>fixedAdjustment</code> (default value) always provides a
+fixed space at left<br>
+      </td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top;"><code>alloy.titlePaneTextAlignment</code><br>
+      </td>
+      <td style="vertical-align: top;">- indicates how the text in a
+title pane should be aligned<br>
+- must be set before instantiating the Alloy Look&amp;Feel<br>
+      </td>
+      <td style="vertical-align: top;"><code>center</code> (default
+value)<br>
+      <code>left</code><br>
+      <code>leading</code><br>
+      <code>right</code><br>
+      <code>trailing</code><br>
+      <br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<h3>Setting Properties</h3>
+Properties can be set by using the static method <code>AlloyLookAndFeel.setProperty(String
+key, String value).</code>&nbsp; The following example shows how the
+license code property can be set with this method:<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#ebe9e7"><code>AlloyLookAndFeel.setProperty("alloy.licenseCode",
+"x#myCompany#dv34dw#s2wp8");</code><br>
+      <code>AlloyLookAndFeel alloyLnf = new AlloyLookAndFeel();<br>
+UIManager.setLookAndFeel(alloyLnF);</code><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<code></code><br>
+Note that some properties must be set before an instance of the class <code>AlloyLookAndFeel</code>
+is created.<br>
+<br>
+<h3>Alternative Ways of Setting Properties</h3>
+You can also set the properties from outside of the software. One way
+is to pass them as parameters at the commandline when starting the
+application, the same way as system properties aare set at startup, by
+simply using <i>-D[property   name]=[property value]</i>.<br>
+<br>
+When starting the application MyApp on Windows passing the theme
+parameter can look like this:<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="2">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#ebe9e7"><code>java.exe
+-Dalloy.theme="bedouin" com.myCompany.MyApp</code><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<code></code>Another alternative way of setting properties is to use  a
+properties-file. You will have to create a simple text file and name it <i>alloy.properties</i>.
+In this text file you write the properties. Each line must contain one
+key/value  pair. Key and value are separated by an equals sign. The
+text of a properties  file can look like this:<br>
+<br>
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+  <tbody>
+    <tr>
+      <td valign="top" bgcolor="#ebe9e7"><code>alloy.licenseCode=3#myCompany#dshj2e#87we2j<br>
+alloy.theme=bedouin<br>
+alloy.isLookAndFeelFrameDecoration=true<br>
+alloy.isSandbox=true</code><br>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+The properties file has to be put somewhere in the class path of your
+application, where the class <code>AlloyLookAndFeel</code> can access it.<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</body>
+</html>

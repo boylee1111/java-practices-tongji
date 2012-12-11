@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>The Alloy Look&amp;Feel - Frame Decorations</title>
+                                                                        
+                 
+  <meta name="Author" content="INCORS GmbH">
+                                                   
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+                                                   
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+  <body>
+                   
+<h2>Using Look&amp;Feel Frame Decorations<br>
+        </h2>
+               
+<h3>Basics</h3>
+     Since version 1.2 the Alloy Look&amp;Feel supports outer Frame decorations 
+  that match the look of the Alloy Look&amp;Feel. This functionality is only 
+  available when used with JRE/JDK versions 1.4 or higher.<br>
+    <br>
+    Example for a look&amp;feel decorated frame:<br>
+    <br>
+    <img src="images/decoration-lnf.png" alt="Look&amp;Feel Decoration"
+ width="466" height="76">
+    <br>
+    <br>
+    <br>
+    The same frame with native decoration:<br>
+    <br>
+    <img src="images/decoration-native.png" alt="Native Decoration"
+ width="466" height="79">
+    <br>
+     <br>
+    <br>
+    <br>
+     There are two ways to enable the look&amp;feel frame decorations:<br>
+     <br>
+         
+<ol>
+       <li>Call the methods <code>JFrame.setDefaultLookAndFeelDecorated(true)</code> 
+  and <code>JDialog.setDefaultLookAndFeelDecorated(true) </code>in your application<code>.
+      </code>This will result in each new JFrame and JDialog having the decorations 
+ provided by the Alloy Look&amp;Feel. Note that both methods are only available 
+ since  JRE/JDK 1.4. With JRE/JDK 1.3 and 1.3.1 a <code>NoSuchMethodException</code>
+  will be thrown.</li>
+       <li>Set the property <code>"alloy.isLookAndFeelFrameDecoration"</code> 
+  to <code>"true"</code>. Look at the <a href="properties.html">section about
+  properties</a> to learn how to set a property in the Alloy Look&amp;Feel.
+  Using a property for setting the look&amp;feel frame decoration has the
+advantage  that you are independant of the JRE/JDK version. For version 1.3
+and 1.3.1  the property will just be ignored.</li>
+         
+</ol>
+      <br>
+         
+<h3>Notes</h3>
+     The look&amp;feel frame decorations has certain limitations that you 
+should   know about. Read this first before using the look&amp;feel frame 
+decorations   in your application to avoid surprising behaviour.<br>
+     <br>
+         
+<ul>
+       <li>The look&amp;feel frame decorations finally honor the minimum
+size   of a frame, which is a very nice feature, but it can also result in
+strange   effects in some cases. The reason for this is that one of the parameters
+ used for calculating the minimum size of a frame is the minimum size of
+the  frame's content pane. In some cases the minimum size of a content pane
+can  differ depending on its current size, which leads to different minimum
+sizes  of a frame for different resizing operations. A simple workaround
+for this  problem is to set the minimum size of &nbsp;the content pane to
+a fixed value,  which can look like this:<br>
+         <br>
+           
+    <table cellpadding="2" cellspacing="2" border="0" width="100%">
+        <tbody>
+          <tr>
+            <td valign="top" bgcolor="#ebe9e7"><code>Container contentPane
+ = myFrame.getContentPane();<br>
+  if (</code><code>contentPane</code><code> instanceof JComponent) {<br>
+     &nbsp; ((JComponent)&nbsp;</code><code>contentPane</code><code>).setMinimumSize(new
+ Dimension(100,  100));<br>
+     }</code><br>
+            </td>
+          </tr>
+               
+      </tbody>          
+    </table>
+      <code><br>
+         </code></li>
+       <li>Please note that in order to remove all decorations from a frame, 
+you will have to call <code>myFrame.getRootPane().setWindowDecorationStyle(JRootPane.NONE)</code> 
+in addition to <code>myFrame.setUndecorated(false)</code>. The method <code>setUndecorated(false)</code> 
+only removes the <i>native</i> decorations from the frame, but is does not 
+affect the decoration style provided by the look and feel.<br>
+   </li>
+       <li>Unlike native decorations the system menu of the look&amp;feel 
+frame   decoration does not alloy choosing an input method (e.g. for Japanese 
+text   input). This affects only very few applications, but you should be 
+aware  of it. Currently we are investigating if there is a way to provide 
+this functionality  with look&amp;Feel frame decorations.</li>
+  <li>If you prefer to use the "classic" style of frame buttons that was
+used until Alloy 1.3.1 you can set this via setting the property "alloy.frameButtonStyle"
+to "classic". Details can be found in the <a href="properties.html">section
+about properties</a>.<br>
+  </li>
+         
+</ul>
+          <br>
+           <br>
+        <br>
+        <br>
+      <br>
+   <br>
+  <br>
+ <br>
+</body>
+</html>

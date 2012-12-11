@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>The Alloy Look&amp;Feel - Basic Usage</title>
+                           
+  <meta name="Author" content="INCORS GmbH">
+               
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+               
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+  <body>
+ 
+<h2>Basic usage of the Alloy Look&amp;Feel</h2>
+                    
+<p>Before using the Alloy Look&amp;Feel make use that these requirements are
+fulfilled:</p>
+                   
+<ul>
+            <li>You must be using a Java&#8482; Runtime Environment version 1.3 
+or      higher or a Java&#8482; Development Kit version 1.3 or higher.</li>
+            <li>The file <i>alloy.jar</i> must be included into the classpath 
+  of  your      application</li>
+     <li>You must have your license code available<br>
+     </li>
+                        
+</ul>
+                   
+<p>For using the Alloy Look&amp;Feel in your application, you will first have
+to unlock the Alloy Look&amp;Feel by setting the license code property (Learn
+more about properties <a href="properties.html">here</a>). Then you have
+to tell     the class javax.swing.UIManager that you want to use the AlloyLook&amp;Feel.
+    <br>
+ </p>
+ 
+<p>This whole process is done by the following code:         </p>
+                    
+<table cellpadding="10" cellspacing="2" border="0" width="100%">
+         <tbody>
+           <tr>
+             <td valign="top" bgcolor="#ebe9e7">                        
+                        <code>com.incors.plaf.alloy.AlloyLookAndFeel.setProperty("alloy.licenseCode",
+   "x#myCompany#skd23j#dsjd9");<br>
+                   try {<br>
+      &nbsp; javax.swing.LookAndFeel alloyLnF = new com.incors.plaf.alloy.AlloyLookAndFeel();<br>
+      &nbsp; javax.swing.UIManager.setLookAndFeel(alloyLnF);<br>
+                   } catch (javax.swing.UnsupportedLookAndFeelException ex) 
+ {<br>
+      &nbsp; // You may handle the exception here<br>
+                   }<br>
+            </code>  </td>
+           </tr>
+                           
+  </tbody>       
+</table>
+                    
+<p>   These lines must be called before any Swing components are created.</p>
+             
+<p><b>Important:</b> Since version 1.1 the license file <i>alloylnf.lic</i>
+is not    needed anymore if you are setting the license code property as
+shown in  the  code. For backwards compatibility reason the license file
+can still be used instead of setting the license property.<br>
+       <br>
+       </p>
+                    
+<h3>Changing the look and feel at runtime or setting the look and feel after
+     Swing components were created</h3>
+                    
+<p>Changing the look and feel at runtime or setting the look and feel after
+     some Swing components were created is quite tricky. There are quite
+some     pitfalls, especially with "orphan" components, which will be explained
+ below.<br>
+          <br>
+          If you want to change the look and feel at runtime or if you want 
+ to  set  the look and feel after some Swing components were created, you 
+will  have  to update the UIs of all created components after changing the 
+look  and feel.  This can be done by calling the method <code>updateUI()</code>
+   of each <code>JComponent</code>,  which is quite cumbersome if there are
+  a few hundred components around. A  more convenient way is to call the
+method    <code>updateComponentTreeUI(Component  c)</code> of the class <code>javax.swing.SwingUtilities</code>.
+   This will  update the UIs of all components in the component tree below
+ the  specified  component. Make sure that you call this method for all windows
+   and frames,  to ensure that all components will be updated.<br>
+          <br>
+          The class <code>com.incors.plaf.alloy.AlloyLookAndFeel</code> provides
+    the  static method <code>updateAllUIs()</code>, which can be used to
+update     all  available Frames and Windows with only one method call. This
+is the    most convienient way of updating all UIs, but it does not allow
+an update    of only part of the component hierarchy.<br>
+          <br>
+          This code shows how to change an applcation's look and feel to
+the   Alloy    Look&amp;Feel during runtime:<br>
+          <br>
+          </p>
+                    
+<table cellpadding="10" width="100%">
+            <tbody>
+              <tr>
+                <td bgcolor="#ebe9e7">                            <code>try 
+ {<br>
+     &nbsp; javax.swing.LookAndFeel alloyLnF = new com.incors.plaf.alloy.AlloyLookAndFeel();<br>
+     &nbsp; javax.swing.UIManager.setLookAndFeel(alloyLnF);<br>
+     &nbsp; com.incors.plaf.alloy.AlloyLookAndFeel.updateAllUIs();<br>
+                    } catch (javax.swing.UnsupportedLookAndFeelException
+ex)   {<br>
+     &nbsp; // You may handle the exception here<br>
+                    }           </code></td>
+              </tr>
+                                       
+  </tbody>          
+</table>
+                    
+<p><br>
+          <b>Be aware of "orphan" components:</b> Watch out for components
+ that   are  not part of the component tree. These are components that have
+ been  created,  but not added to the component hierarchy yet. Since they
+are not  part of the component hierarchy, they are not reached when the component 
+ tree is updated. On these "orphan" components the method <code>updateComponentTreeUI(Component
+     c)</code> of the class <code>javax.swing.SwingUtilities</code> has to
+ be   called separately to make sure that their UIs are updated, too.<br>
+          </p>
+          <b>Be aware of layout changes:</b> When switching between different 
+  look  and feels during runtime, the layout of your application can become 
+  corrupted  due different space requirements of the components when displayed 
+  with different  look and feels. One way to ensure the correct layout it 
+to  call validate()  on the top level containers after changing the look and
+feel.<br>
+          <br>
+         <br>
+      <br>
+ <br>
+</body>
+</html>

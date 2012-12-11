@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>The Alloy Look&amp;Feel - Themes</title>
+                                                                     
+  <meta name="Author" content="INCORS GmbH">
+                                       
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+                                       
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+  <body>
+                 
+<h2>Using Themes with the Alloy Look&amp;Feel</h2>
+                                
+<h3>Available Themes</h3>
+                            
+<p>The Alloy Look&amp;Feel comes with four different themes: Default, Bedouin, 
+      Glass, and Acid. Since version 1.2 it is also possible to <a
+ href="#CUSTOM_THEMES">create custom themes</a>.<br>
+   </p>
+     
+<p>The table below gives an overview of the included themes with  a  short 
+  description.<br>
+              <br>
+              </p>
+                            
+<table cellpadding="10" border="1">
+                <tbody>
+                  <tr>
+                    <td bgcolor="#ebe9e7"><b>Theme</b></td>
+                    <td bgcolor="#ebe9e7"><b>Colors and application</b></td>
+                    <td bgcolor="#ebe9e7"><b>Description</b></td>
+      <td valign="top" bgcolor="#ebe9e7"><b>Colors values (r, g, b)</b><br>
+(explanations on the colors can be found in the section about <a
+ href="#CUSTOM_THEMES">custom themes</a>)<br>
+      </td>
+                  </tr>
+                  <tr>
+                    <td>Default</td>
+                    <td><img src="images/default-colors.png" alt="">
+                   <br>
+                      <br>
+                      <img src="images/default-scrollbar.png" alt="">
+                   </td>
+                    <td>The combination of blue and yellow is a widely accepted 
+   color           combinations for business applications. Together with the
+   rather          subtle dimensionality it gives this theme a professional 
+  touch.</td>
+      <td valign="top" nowrap="true">contrastControlColor: 151, 182, 224<br>
+standardControlColor: 241, 240, 227<br>
+arrowButtonColor: 236, 234, 226<br>
+frameColor: 90, 144, 218<br>
+desktopColor: 164, 164, 158<br>
+selectionColor: 96, 128, 172<br>
+rolloverColor: 255, 207, 49<br>
+highlightColor: 249, 224, 137<br>
+      </td>
+                  </tr>
+                  <tr>
+                    <td>Bedouin</td>
+                    <td><img src="images/bedouin-colors.png" alt="">
+                   <br>
+                      <br>
+                      <img src="images/bedouin-scrollbar.png" alt="">
+                   </td>
+                    <td>A good choice for applications where it is important
+  that   the   look         and feel does not get into the way of the user.</td>
+      <td valign="top" nowrap="true">contrastControlColor: 180, 190, 194<br>
+standardControlColor: 238, 236, 232<br>
+ arrowButtonColor: 238, 236, 232<br>
+ frameColor: 132, 144, 150<br>
+ desktopColor: 130, 138, 140<br>
+ selectionColor: 106, 114, 118<br>
+ rolloverColor: 234, 182, 70<br>
+ highlightColor: 250, 214, 138<br>
+      </td>
+                  </tr>
+                  <tr>
+                    <td>Glass</td>
+                    <td><img src="images/glass-colors.png" alt="">
+                   <br>
+                      <br>
+                      <img src="images/glass-scrollbar.png" alt="">
+                   </td>
+                    <td>The glass effects that are used on scrollbars and 
+buttons     and   the         blue and white create a very cool and modern 
+look.</td>
+      <td valign="top" nowrap="true">contrastControlColor: 142, 202, 251<br>
+standardControlColor: 245, 246, 247<br>
+ arrowButtonColor: 245, 246, 247<br>
+ frameColor: 138, 194, 242<br>
+ desktopColor: 184, 196, 206<br>
+ selectionColor: 108, 170, 214<br>
+ rolloverColor: 121, 192, 255<br>
+ highlightColor: 178, 216, 255<br>
+      </td>
+                  </tr>
+                  <tr>
+                    <td>Acid</td>
+                    <td><img src="images/acid-colors.png" alt="">
+                   <br>
+                      <br>
+                      <img src="images/acid-scrollbar.png" alt="">
+                   </td>
+                    <td>The glow effects on the scrollbar, that make it look
+  like           translucent plastic, is somewhat unusual but gives the theme
+  an         interesting and friendly touch.</td>
+      <td valign="top" nowrap="true">contrastControlColor: 180, 205, 140<br>
+standardControlColor: 232, 232, 228<br>
+ arrowButtonColor: 232, 232, 228<br>
+ frameColor: 144, 174, 96<br>
+ desktopColor: 146, 150, 144<br>
+ selectionColor: 100, 128, 64<br>
+ rolloverColor: 225, 152, 87<br>
+ highlightColor: 225, 226, 163<br>
+      </td>
+                  </tr>
+                                                       
+  </tbody>              
+</table>
+                            
+<p><br>
+              </p>
+                            
+<h3>Setting the Theme</h3>
+                            
+<p>There are two different ways to set the current theme. One way is to set
+       the theme when creating the look and feel instance. The class <code>com.incors.plaf.alloy.AlloyLookAndFeel</code> 
+      has the constructor <code>AlloyLookAndFeel(AlloyTheme theme)</code> 
+which      takes a theme object as an argument. If you are using the empty 
+constructor      <code>AlloyLookAndFeel()</code>, the Default Theme will be
+used.<br>
+              <br>
+              Setting the theme when creating an instance of <code>AlloyLookAndFeel</code>
+       can look like this:<br>
+              <br>
+              </p>
+                            
+<table cellpadding="10">
+                <tbody>
+                  <tr>
+                    <td bgcolor="#ebe9e7">                              
+                                                            
+      <pre>try {<br>  com.incors.plaf.alloy.AlloyTheme theme = new com.incors.plaf.alloy.themes.bedouin.BedouinTheme();<br>  // The lines below can be used for setting the other themes.<br>  // com.incors.plaf.alloy.AlloyTheme theme = new com.incors.plaf.alloy.themes.glass.GlassTheme();<br>  // com.incors.plaf.alloy.AlloyTheme theme = new com.incors.plaf.alloy.themes.acid.AcidTheme();<br>  javax.swing.LookAndFeel alloyLnF = new com.incors.plaf.alloy.AlloyLookAndFeel(theme);        <br>  javax.swing.UIManager.setLookAndFeel(alloyLnF);<br>} catch (javax.swing.UnsupportedLookAndFeelException ex) {<br>  // You may handle the exception here<br>}</pre>
+                    </td>
+                  </tr>
+                                                       
+  </tbody>              
+</table>
+                            
+<p><br>
+              The Alloy Look&amp;Feel allows switching of the theme during
+ runtime.     For  this purpose the class <code>com.incors.plaf.alloy.AlloyLookAndFeel</code>
+       provides the method <code>setTheme(AlloyTheme newTheme, boolean updateAllUIs)</code>. 
+      This method makes theme switching very convenient for the fact that 
+it   requires   only one line of code in most cases. Set the parameter <code>updateAllUIs</code> 
+      to <code>true</code> if you want the Alloy Look&amp;Feel to automatically 
+      update the UIs of all components in the component hierarchy. If you 
+set    the  parameter to <code>false</code>, you will have to update the UIs
+by   yourself,  which allows update of only part of the component hierarchy.<br>
+              <br>
+              </p>
+                            
+<table cellpadding="10">
+                <tbody>
+                  <tr>
+                    <td bgcolor="#ebe9e7">                              
+                                                            
+      <pre>/*<br>  Note: the object "alloyLnF" must be the instance of the class "com.incors.plaf.alloy.AlloyLookAndFeel" <br>  that is set as the current LookAndFeel.<br>*/<br>alloyLnf.setTheme(new com.incors.plaf.alloy.themes.bedouin.BedouinTheme(), true);<br>// Alternatively use one of the following lines to set the other themes <br>//alloyLnf.setTheme(new com.incors.plaf.alloy.themes.glass.GlassTheme(), true);<br>//alloyLnf.setTheme(new com.incors.plaf.alloy.themes.acid.AcidTheme(), true);<br>//alloyLnf.setTheme(new com.incors.plaf.alloy.DefaultAlloyTheme(), true);</pre>
+                    </td>
+                  </tr>
+                                                       
+  </tbody>              
+</table>
+                            
+<p><br>
+              Please keep in mind the potential issues with "orphan" components
+     and layout corruption which were mentioned in the <a
+ href="basic.html">basic  usage guide</a>.<br>
+             <br>
+              </p>
+                                
+<h3>Setting the Theme Property</h3>
+                            
+<p>To set the initially used theme you can also use the theme property. To 
+     do this, invoke invoke this line <u>before</u> creating the first instance 
+   of the   class <code>AlloyLookAndFeel</code>:<br>
+           </p>
+                     
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+             <tbody>
+               <tr>
+                 <td valign="top" bgcolor="#ebe9e7"><code>AlloyLookAndFeel.setProperty("alloy.theme", 
+     "glass");</code><br>
+                 </td>
+               </tr>
+                                           
+  </tbody>           
+</table>
+                     
+<p>Possible values for the property are "default", "glass", "acid", and "bedouin".<br>
+           </p>
+                                 
+<p>For more information on setting properties please refer to <a
+ href="properties.html">section about properties</a>.</p>
+                                  <br>
+                  
+<h3><a name="CUSTOM_THEMES"></a>Creating Custom Themes</h3>
+    Since version 1.2 the Alloy Look&amp;Feel provides a simple way for creating
+  customized themes. For creating a custom theme all you have to do is to
+call  the method <code>createTheme()</code> of the class <a
+ href="api/com/incors/plaf/alloy/themes/custom/CustomThemeFactory.html"><code>com.incors.plaf.alloy.themes.custom.CustomThemeFactory</code></a>.<br>
+    <br>
+    For creating a custom theme you will have to decide on six colors:<br>
+       
+<ul>
+      <li><i>Contrast Color</i>: This color will be used for scroll bars,
+progress  bars, and frame decorations. For the overall impression of you
+theme this  color is the most important.</li>
+      <li><i>Standard Color</i>: This color will be used for panels, buttons, 
+ and many other backgrounds. Since most of the user interface will be in this
+ color, you should use a rather light color with no or only slight saturation.</li>
+      <li><i>Desktop Color</i>: This color is only used for painting the
+background   of a JDesktopPane. In most cases it is a good idea to use a
+quite dark color   with the same hue as the secondary color.</li>
+      <li><i>Selection Color</i>: This color is used for selection indicators 
+ like the dot of a radio button and the hook of a check box. Usually this 
+color is very similar to the primary color.</li>
+      <li><i>Rollover Color</i>: This color is used for painting the rollover 
+ indicator on buttons, radio buttons, and check boxes. Use a quite strong 
+an bright color for this.</li>
+      <li><i>Highlight Color</i>: This color is used for painting the background 
+ of selected text and selected menu items. Often a lighter version of the 
+primary color's complementary color is used for this.</li>
+       
+</ul>
+    <br>
+    A nice tool for creating your own theme is the WebStart demo application
+  on the Alloy Look&amp;Feel website, which allows interactive creation of
+ custom themes.<br>
+    <br>
+    Finally here is a code example for creating and setting a custom theme:<br>
+    <br>
+       
+<table cellpadding="2" cellspacing="2" border="0" width="100%">
+             <tbody>
+               <tr>
+                 <td valign="top" bgcolor="#ebe9e7"><code><br>
+   // define colors<br>
+   Color contrast = new Color(171, 177, 128);<br>
+    Color standard = new Color(242, 242, 235);<br>
+         </code><code> Color desktop = new Color(100, 103, 92);<br>
+    </code><code> Color selection = new Color(112, 142, 148);<br>
+         </code><code> Color rollover = new Color(182, 204, 216);<br>
+         </code><code> Color highlight = new Color(180, 208, 213);<br>
+         </code><code><br>
+   // create custom theme<br>
+   com.incors.plaf.alloy.AlloyTheme myTheme =<br>
+    &nbsp; &nbsp; com.incors.plaf.alloy.themes.custom.CustomThemeFactory.createTheme(contrast,<br>
+    &nbsp; &nbsp; standard, desktop, selection, rollover, highlight);<br>
+         <br>
+   // create look and feel with the custom theme  </code><br>
+         <code> try {<br>
+    &nbsp; javax.swing.LookAndFeel alloyLnF = new com.incors.plaf.alloy.AlloyLookAndFeel(myTheme);<br>
+    &nbsp; javax.swing.UIManager.setLookAndFeel(alloyLnF);<br>
+    } catch (javax.swing.UnsupportedLookAndFeelException ex) {<br>
+    &nbsp; // You may handle the exception here<br>
+    }</code><br>
+         <br>
+                 </td>
+               </tr>
+                                           
+  </tbody>           
+</table>
+     <br>
+  <br>
+ <br>
+</body>
+</html>

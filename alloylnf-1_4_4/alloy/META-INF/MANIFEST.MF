@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Created-By: 1.5.0_02 (Sun Microsystems Inc.)
+Cracked-By: Jiajing Xu from China

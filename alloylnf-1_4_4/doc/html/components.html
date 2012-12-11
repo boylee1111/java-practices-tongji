@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <title>The Alloy Look&amp;Feel - Basic Usage</title>
+                                                                        
+   
+  <meta name="Author" content="INCORS GmbH">
+                                           
+  <meta name="Copyright" content="Copyright (c) 2002 by INCORS GmbH">
+                                           
+  <link rel="stylesheet" href="css/incors.css" type="text/css">
+</head>
+  <body>
+             
+<h2>Customization of Components</h2>
+        This page list possible customizations for single components. The 
+list    will be extended in future releases.<br>
+        Currently covered components:        
+<ul>
+          <li><a href="#JButton">JButton/JToggleButton</a></li>
+          <li><a href="#JList">JList</a></li>
+          <li><a href="#JPopupMenu">JPopupMenu</a></li>
+          <li><a href="#JTextField">JTextField/JTextArea</a></li>
+               
+</ul>
+        <br>
+               
+<h3><a name="JButton"></a> JButton/JToggleButton</h3>
+           <b>Using setOpaque() and setContentAreaFilled()</b><br>
+         The table below shows the effects of using the two methods <code>setOpaque()</code> 
+    and <code>setContentAreaFilled()</code>.<br>
+         <br>
+                 
+<table width="100%" border="1" cellspacing="2" cellpadding="2">
+            <tbody>
+              <tr>
+                <td valign="top" align="center">opaque<br>
+                </td>
+                <td valign="top" align="center">content area filled<br>
+                </td>
+                <td valign="top" align="center">on standard panel<br>
+                </td>
+                <td valign="top" align="center">on blue panel<br>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" align="center"><code>true<br>
+                </code></td>
+                <td valign="top" align="center"><code>true<br>
+                </code></td>
+                <td valign="top" align="center"><img
+ src="images/button-1-1-1.png" alt="" width="83" height="42">
+                <br>
+                </td>
+                <td valign="top" align="center"><img
+ src="images/button-2-1-1.png" alt="" width="83" height="42">
+                <br>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" align="center"><code>false<br>
+                </code></td>
+                <td valign="top" align="center"><code>true<br>
+                </code></td>
+                <td valign="top" align="center"><img
+ src="images/button-1-2-1.png" alt="" width="83" height="42">
+                <br>
+                </td>
+                <td valign="top" align="center"><img
+ src="images/button-2-2-1.png" alt="" width="83" height="42">
+                <br>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" align="center"><code>true<br>
+                </code></td>
+                <td align="center" valign="top"><code>false<br>
+                </code></td>
+                <td valign="top" align="center"><img
+ src="images/button-1-2-2.png" alt="" width="83" height="42">
+                <br>
+                </td>
+                <td valign="top" align="center"><img
+ src="images/button-2-2-2.png" alt="" width="83" height="42">
+                <br>
+                </td>
+              </tr>
+              <tr>
+                <td valign="top" align="center"><code>true<br>
+                </code></td>
+                <td valign="top" align="center"><code>false<br>
+                </code></td>
+                <td valign="top" rowspan="1" colspan="2" align="center">avoid 
+  this   combination<br>
+                </td>
+              </tr>
+                                       
+  </tbody>          
+</table>
+          <br>
+        From the table can be seen that a button should be set to non-opaque
+  when   the background is different from the background of the container.
+ Since setting  a component to non-opaque can result in a negative performance
+ impact, a button should be set to opaque whenever possible.<br>
+          &nbsp;<br>
+        <br>
+          <b>Setting a custom background color</b><br>
+          There are two ways for setting a background color of a button.<br>
+        <br>
+        1. To have a flat, monochrome background use the method<code> setBackground(Color
+    bg)</code>. <br>
+        2. In order to set a custom background color with a 3D effect, use
+ the   static  method <code>set3DBackground(AbstractButton b, Color c)</code>
+ of   the class  <code>com.incors.plaf.alloy.AlloyCommonUtilities</code>.<br>
+          <br>
+        Here are two examples of buttons with custom backgrounds:<br>
+        <br>
+               
+<table width="60%" border="1" cellspacing="2" cellpadding="2">
+          <tbody>
+            <tr>
+              <td align="center" valign="top">color<br>
+              </td>
+              <td valign="top" align="center">flat<br>
+        (using <code>setBackground(Color bg)</code>)<br>
+              </td>
+              <td valign="top" align="center">3D<br>
+        (using <code>set3DBackground(AbstractButton b, Color c)</code>)<br>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" align="center">white<br>
+              </td>
+              <td valign="top" align="center"><img
+ src="images/button-white-flat.png" alt="white-flat" width="85"
+ height="44">
+              <br>
+              </td>
+              <td valign="top" align="center"><img
+ src="images/button-white-3d.png" alt="white-3D" width="85" height="44">
+              <br>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top" align="center">blue<br>
+              </td>
+              <td valign="top" align="center"><img
+ src="images/button-blue-flat.png" alt="blue-flat" width="86"
+ height="45">
+              <br>
+              </td>
+              <td valign="top" align="center"><img
+ src="images/button-blue-3d.png" alt="blue-3D" width="86" height="45">
+              <br>
+              </td>
+            </tr>
+                               
+  </tbody>        
+</table>
+        <br>
+        Please note that after setting a custom color for the background
+of  a  button,  you will have to set the button to non-opaque in order to
+avoid  the corners  of the button from being painted in the custom color.<br>
+       <br>
+       <br>
+         <b>Disabling the pulse effect on default buttons</b><br>
+          You can disable the pulse effect on default buttons by setting
+the   property   "<code>alloy.isButtonPulseEffectEnabled</code>" to "<code>false</code>". 
+   Look at the <a href="properties.html">section    about properties</a> for
+ details on usage.<br>
+          <br>
+        <br>
+          <b>Setting a custom border</b><br>
+          The Alloy Look&amp;Feel provides some custom borders for buttons. 
+ These   borders are designed for special cases, in which the standard border 
+ is not  the best solution. The the borders are created by static methods 
+of the class  <code>com.incors.plaf.alloy.AlloyCommonBorderFactory</code>.<br>
+               
+<ul>
+          <li><code>createSmallButtonBorder()</code>: Creates a border which
+  consumes   less space than the standard border. It can be used for small
+ tool bar buttons</li>
+          <li><code>createAlternativeToolBarButtonBorder()</code>: Creates
+ a  border   that is always painted when the border is located in a toolbar.
+ This can  improve visibility of the button, especially for buttons that
+display   text.</li>
+               
+</ul>
+                 
+<h3><a name="JList"></a> JList</h3>
+         <b>Making the background tranlucent</b><br>
+         To make the background of a list translucent you have to set the 
+text   field  to non-opaque (using <code>setOpaque(false)</code> ). Then set
+the   background  color to a translucent color (example: <code>setBackground(new
+    Color(255,  255, 255, 128))</code> ). Additionally you may have to set
+ the  containing   viewport and scrollpane to non-opaque.<br>
+          <br>
+                 
+<h3><a name="JPopupMenu"></a>JPopupMenu</h3>
+         <b> Disabling the shadow effect</b><br>
+          You can disable the shadow effects on popup menus (and on the popup 
+  of  combo boxes) by setting the property "<code>alloy.isPopupShadowEffectEnabled</code>" 
+    to "<code>false</code>". Look at the <a href="properties.html">section
+    about properties</a> for details on usage. <br>
+        <br>
+                 
+<h3><a name="JTextField"></a> JTextField/JTextArea</h3>
+          <b>Setting the non-editable background</b><br>
+         There are several ways to set the non-editable background<br>
+                 
+<ol>
+           <li>Use the method <code>setBackground(Color bg)</code> in class 
+     <code>JTextField</code>.    This will set the editable and non-editable 
+ background to the specified  color.</li>
+           <li>Set the UI-default "<code>TextField.lockedBackground</code>" 
+ to  specify  the non-editable background for all text fields.</li>
+           <li>Set the client property "<code>lockedBackground</code>". You 
+ can   set a client property with the method <code>putClientProperty()</code> 
+ of   the class <code>JTextField</code>.</li>
+                 
+</ol>
+         <b><br>
+        Making the background translucent</b><br>
+         To make the background of a text field translucent you have to set 
+ the   text  field to non-opaque (using <code>setOpaque(false) </code>). Then
+ set   the background color to a translucent color (example: <code>setBackground(new 
+    Color(255, 255, 255, 128))</code> ).<br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+       <br>
+       <br>
+     <br>
+   
+</body>
+</html>
