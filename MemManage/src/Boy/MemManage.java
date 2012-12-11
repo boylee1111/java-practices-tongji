@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 
 // MemManage.java -- Main
 

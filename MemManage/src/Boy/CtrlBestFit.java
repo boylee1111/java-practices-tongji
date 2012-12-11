@@ -1,11 +1,12 @@
-package Boy;
+package boy;
 
 // CtrlBestFit.java -- Implements the best-fit algorithms
 import java.util.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
-import Boy.Constants.AlgoType;
+
+import boy.Constants.AlgoType;
 
 public class CtrlBestFit implements ActionListener, KeyListener {
 	private LinkedList<MemBlock> blockList;
@@ -55,8 +56,8 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				freeMem(memName);
 			}
 		}
-		if (event == memFrame.bestPackButton) {
-			if (!Constants.pack(memFrame, blockList, type)) {
+		if (event == memFrame.bestCompactionButton) {
+			if (!Constants.compaction(memFrame, blockList, type)) {
 				JOptionPane.showMessageDialog(null, 
 						"Please allocte memory first",
 						"Error",
@@ -242,7 +243,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 
 			public void run() {
 				memFrame.bestDemoButton.setEnabled(false);
-				memFrame.bestPackButton.setEnabled(false);
+				memFrame.bestCompactionButton.setEnabled(false);
 				memFrame.bestClearButton.setEnabled(false);
 				memFrame.bestAllocButton.setEnabled(false);
 				memFrame.bestFreeButton.setEnabled(false);
@@ -270,7 +271,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 					}
 				}
 				memFrame.bestDemoButton.setEnabled(true);
-				memFrame.bestPackButton.setEnabled(true);
+				memFrame.bestCompactionButton.setEnabled(true);
 				memFrame.bestClearButton.setEnabled(true);
 				memFrame.bestAllocButton.setEnabled(true);
 				memFrame.bestFreeButton.setEnabled(true);

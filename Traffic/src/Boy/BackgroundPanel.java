@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 // BackgroundPanel.java -- Initialize panel
 import java.util.*;
 import java.awt.*;

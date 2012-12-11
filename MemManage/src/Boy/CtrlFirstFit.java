@@ -1,11 +1,12 @@
-package Boy;
+package boy;
 
 // CtrlFirstFit.java -- Implements the first-fit algorithms
 import java.util.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
-import Boy.Constants.AlgoType;
+
+import boy.Constants.AlgoType;
 
 public class CtrlFirstFit implements ActionListener, KeyListener {
 	private LinkedList<MemBlock> blockList;
@@ -55,8 +56,8 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 				freeMem(memName);
 			}
 		}
-		if (event == memFrame.firstPackButton) {
-			if (!Constants.pack(memFrame, blockList, type)) {
+		if (event == memFrame.firstCompactionButton) {
+			if (!Constants.compaction(memFrame, blockList, type)) {
 				JOptionPane.showMessageDialog(null, 
 						"Please allocte memory first",
 						"Error",
@@ -239,7 +240,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 
 			public void run() {
 				memFrame.firstDemoButton.setEnabled(false);
-				memFrame.firstPackButton.setEnabled(false);
+				memFrame.firstCompactionButton.setEnabled(false);
 				memFrame.firstClearButton.setEnabled(false);
 				memFrame.firstAllocButton.setEnabled(false);
 				memFrame.firstFreeButton.setEnabled(false);
@@ -267,7 +268,7 @@ public class CtrlFirstFit implements ActionListener, KeyListener {
 					}
 				}
 				memFrame.firstDemoButton.setEnabled(true);
-				memFrame.firstPackButton.setEnabled(true);
+				memFrame.firstCompactionButton.setEnabled(true);
 				memFrame.firstClearButton.setEnabled(true);
 				memFrame.firstAllocButton.setEnabled(true);
 				memFrame.firstFreeButton.setEnabled(true);

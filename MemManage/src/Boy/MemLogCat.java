@@ -1,10 +1,11 @@
-package Boy;
+package boy;
 
 // LogCat.java -- Record the every step
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import Boy.Constants.AlgoType;
+
+import boy.Constants.AlgoType;
 
 public class MemLogCat extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;

@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 
 // Constants.java -- Definition of constants
 import java.awt.*;
@@ -53,8 +53,8 @@ public class Constants {
 		return max;
 	}
 	
-	// Pack algorithm
-	public static boolean pack(MemFrame memFrame, LinkedList<MemBlock> list, AlgoType type) {
+	// p algorithm
+	public static boolean compaction(MemFrame memFrame, LinkedList<MemBlock> list, AlgoType type) {
 		if (list.size() == 1 && !list.getFirst().getUsed()) {
 			return false;
 		}
@@ -129,10 +129,10 @@ public class Constants {
 		
 		switch (type) {
 		case FIRST_FIT:
-			memFrame.firstFit.logCat.appendLog("Memory pack successfully!");
+			memFrame.firstFit.logCat.appendLog("Memory compaction successfully!");
 			break;
 		case BEST_FIT:
-			memFrame.bestFit.logCat.appendLog("Memory pack successfully!");
+			memFrame.bestFit.logCat.appendLog("Memory compaction successfully!");
 		}
 
 		return true;

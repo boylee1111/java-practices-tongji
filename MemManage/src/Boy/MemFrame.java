@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 
 // MemFrame.java -- Initialize the frame
 import java.awt.*;
@@ -32,7 +32,7 @@ public class MemFrame extends JFrame implements ActionListener {
 	
 	// Buttons, use as their name
 	JButton firstDemoButton, bestDemoButton;
-	JButton firstPackButton, bestPackButton;
+	JButton firstCompactionButton, bestCompactionButton;
 	JButton firstClearButton, bestClearButton;
 	JButton firstLogButton, bestLogButton;
 	JButton firstAllocButton, bestAllocButton;
@@ -66,8 +66,8 @@ public class MemFrame extends JFrame implements ActionListener {
 
 		firstDemoButton = new JButton("First-Fit Demo");
 		bestDemoButton = new JButton("Best-Fit Demo");
-		firstPackButton = new JButton("First-Fit Pack");
-		bestPackButton = new JButton("Best-Fit Pack");
+		firstCompactionButton = new JButton("Compaction");
+		bestCompactionButton = new JButton("Compaction");
 		firstClearButton = new JButton("First-Fit Clear");
 		bestClearButton = new JButton("Best-Fit Clear");
 		firstLogButton = new JButton("First-Fit LogCat");
@@ -138,16 +138,16 @@ public class MemFrame extends JFrame implements ActionListener {
 		contentPane.add(firstDemoButton);
 		contentPane.add(bestDemoButton);
 
-		firstPackButton.setFont(font);
-		bestPackButton.setFont(font);
-		firstPackButton.setBounds(330, 250, 130, 40);
-		bestPackButton.setBounds(830, 250, 130, 40);
+		firstCompactionButton.setFont(font);
+		bestCompactionButton.setFont(font);
+		firstCompactionButton.setBounds(330, 250, 130, 40);
+		bestCompactionButton.setBounds(830, 250, 130, 40);
 		
-		firstPackButton.addActionListener(firstFit);
-		bestPackButton.addActionListener(bestFit);
+		firstCompactionButton.addActionListener(firstFit);
+		bestCompactionButton.addActionListener(bestFit);
 		
-		contentPane.add(firstPackButton);
-		contentPane.add(bestPackButton);
+		contentPane.add(firstCompactionButton);
+		contentPane.add(bestCompactionButton);
 
 		firstClearButton.setFont(font);
 		bestClearButton.setFont(font);

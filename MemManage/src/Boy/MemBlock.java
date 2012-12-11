@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 
 // MemBlock.java -- Implements the every block in memory panel
 import java.awt.*;

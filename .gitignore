@@ -35,5 +35,8 @@ _ReSharper*/
 #ignore dir
 .metadata
 .setting
+Java_Applet
 Java_Swing
+Java_Study
 Elevator
+alloylnf-1_4_4

@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 // BackgroundFrame.java -- Initialize the frame of the programming
 import java.awt.event.*;
 import javax.swing.*;

@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 // FreshPanel.java -- Used to fresh the panel, prevent flicker
 import java.awt.*;
 

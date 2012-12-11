@@ -1,4 +1,4 @@
-package Boy;
+package boy;
 // Constants.java -- Definition of constants
 
 public class Constants {
