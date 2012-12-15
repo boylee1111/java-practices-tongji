@@ -1,6 +1,7 @@
 package boy;
 
 enum File_Type { directory, file };
+enum Status_Type { all_right, rename, illegal_name, memory_lack };
 
 public class Constants {
 	static int BLOCK_SIZE = 256; // 每一个块的大小
