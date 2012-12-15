@@ -1,12 +1,13 @@
 package boy;
 
-public class FileFAT {
+public class FileFat {
 	private int ID; // 标示符，hashCode表示
 	private int nextID; // 下一个标示符，hashCode表示
-	private int clusterNum;
+//	private int clusterNum;
+	private String data = null;
 	private boolean isUsed;
 	
-	public FileFAT() {
+	public FileFat() {
 		ID = this.hashCode();
 		isUsed = false;
 	}
@@ -27,12 +28,20 @@ public class FileFAT {
 		this.nextID = nextID;
 	}
 
-	public int getClusterNum() {
-		return clusterNum;
+//	public int getClusterNum() {
+//		return clusterNum;
+//	}
+//
+//	public void setClusterNum(int clusterNum) {
+//		this.clusterNum = clusterNum;
+//	}
+
+	public String getData() {
+		return data;
 	}
 
-	public void setClusterNum(int clusterNum) {
-		this.clusterNum = clusterNum;
+	public void setData(String data) {
+		this.data = data;
 	}
 
 	public boolean isUsed() {

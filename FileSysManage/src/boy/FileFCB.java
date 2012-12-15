@@ -12,6 +12,7 @@ public class FileFCB {
 	private Map<String, Set<String>> accessList = null; // ACL
 	private File_Type fileTyle;
 	private	int fileSize;
+	private FileFat fileFat = null;
 	
 	public FileFCB(String fileName) {
 		this.fileName = fileName;
@@ -22,6 +23,7 @@ public class FileFCB {
 //		accessList.put("read", new HashSet<String>());
 //		accessList.put("write", new HashSet<String>());
 		fileSize = 1;
+		fileFat = new FileFat();
 	}
 
 	public String getFileName() {
@@ -86,5 +88,13 @@ public class FileFCB {
 
 	public void setFileSize(int fileSize) {
 		this.fileSize = fileSize;
+	}
+
+	public FileFat getFileFat() {
+		return fileFat;
+	}
+
+	public void setFileFat(FileFat fileFat) {
+		this.fileFat = fileFat;
 	}
 }
