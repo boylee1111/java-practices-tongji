@@ -4,6 +4,10 @@ enum File_Type { directory, file };
 enum Status_Type { all_right, rename, illegal_name, memory_lack };
 
 public class Constants {
+	// UI常量定义
+	static int FRAME_LENGTH = 800, FRAME_WIDTH = 600;
+
+	// 文件系统管理常量定义
 	static int BLOCK_SIZE = 256; // 每一个块的大小
 	static int CLUSTER_SIZE = BLOCK_SIZE * 4; // 每一个簇的大小
 	static int CLUSTER_NUM = 2048;

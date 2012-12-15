@@ -6,7 +6,6 @@ import javax.swing.*;
 public class BackgroundFrame extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-
 	// One menu bar, two menus, and six menu items totally 
 	private JMenuBar menuBar;
 	private JMenu editMenu, helpMenu;
