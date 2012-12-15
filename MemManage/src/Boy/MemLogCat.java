@@ -23,7 +23,7 @@ public class MemLogCat extends JFrame implements ActionListener {
 	AlgoType type;
 	
 	public MemLogCat() {
-		this.setSize(Constants.logCatFrame);
+		this.setSize(Constants.LOGCAT_FRAME_NAME);
 		contentPane = new JPanel();
 		editPane = new JPanel();
 		contentPane.setLayout(new BorderLayout());

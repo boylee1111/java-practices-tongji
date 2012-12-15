@@ -29,7 +29,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		memNum = 0;
 		usedSize = 0;
 		isDemo = false;
-		largestSize = Constants.memSize;
+		largestSize = Constants.MEM_SIZE;
 		blockList = new LinkedList<MemBlock>();
 		logCat = new MemLogCat();
 		logCat.type = AlgoType.BEST_FIT;
@@ -69,7 +69,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		if (event == memFrame.bestDemoButton) {
 			try {
 				Constants.clear(memFrame, blockList, type);
-				largestSize = Constants.memSize;
+				largestSize = Constants.MEM_SIZE;
 				usedSize = memNum = 0;
 				logCat.setRate(0.0f);
 				initList();
@@ -85,7 +85,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		}
 		if (event == memFrame.bestClearButton) {
 			Constants.clear(memFrame, blockList, type);
-			largestSize = Constants.memSize;
+			largestSize = Constants.MEM_SIZE;
 			usedSize = memNum = 0;
 			logCat.setRate(0.0f);
 			initList();
@@ -128,7 +128,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 					JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
-		if (size < Constants.memLeast) {
+		if (size < Constants.MEM_LEAST) {
 			JOptionPane.showMessageDialog(null, 
 					"Please allocate 10K at least.",
 					"Error",
@@ -155,10 +155,10 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		usedSize += size;
 
 		if (restSize != 0){
-			tmpBlock.setBounds(2, tmpBlock.beginY, Constants.blockWidth, tmpBlock.size / Constants.factor);
+			tmpBlock.setBounds(2, tmpBlock.beginY, Constants.BLOCK_WIDTH, tmpBlock.size / Constants.FACTOR);
 			MemBlock newBlock = new MemBlock("free", restSize);
-			newBlock.beginY = tmpBlock.beginY + tmpBlock.size / Constants.factor;
-			newBlock.setBounds(2, newBlock.beginY, Constants.blockWidth, newBlock.size / Constants.factor);
+			newBlock.beginY = tmpBlock.beginY + tmpBlock.size / Constants.FACTOR;
+			newBlock.setBounds(2, newBlock.beginY, Constants.BLOCK_WIDTH, newBlock.size / Constants.FACTOR);
 			newBlock.setUsed(false);
 			blockList.add(i + 1, newBlock);
 			memFrame.bestMemPane.add(newBlock);
@@ -167,7 +167,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
 		logCat.appendLog("Allocate " + size + "K successfully!");
-		logCat.setRate(usedSize / Constants.memSize);
+		logCat.setRate(usedSize / Constants.MEM_SIZE);
 
 		memNum++;
 		return true;
@@ -194,7 +194,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				nextBlock = blockList.get(i + 1);
 				if (!nextBlock.getUsed()){
 					freeBlock.size += nextBlock.size;
-					freeBlock.setBounds(2, freeBlock.beginY, Constants.blockWidth, freeBlock.size / Constants.factor);
+					freeBlock.setBounds(2, freeBlock.beginY, Constants.BLOCK_WIDTH, freeBlock.size / Constants.FACTOR);
 					blockList.remove(nextBlock);
 					memFrame.bestMemPane.remove(nextBlock);
 				}
@@ -206,7 +206,7 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 				preBlock = blockList.get(i - 1);
 				if (!preBlock.getUsed()) {
 					preBlock.size += freeBlock.size;
-					preBlock.setBounds(2, preBlock.beginY, Constants.blockWidth, preBlock.size / Constants.factor );
+					preBlock.setBounds(2, preBlock.beginY, Constants.BLOCK_WIDTH, preBlock.size / Constants.FACTOR );
 					blockList.remove(freeBlock);
 					memFrame.bestMemPane.remove(freeBlock);
 				}
@@ -223,14 +223,14 @@ public class CtrlBestFit implements ActionListener, KeyListener {
 		// Get the largest size that hasn't used
 		largestSize = Constants.getLargestSize(blockList);
 		logCat.appendLog("Free " + name + " successfully!");
-		logCat.setRate(usedSize / Constants.memSize);
+		logCat.setRate(usedSize / Constants.MEM_SIZE);
 	}
 
 	// Initialize list
 	public void initList() {
 		if (blockList.isEmpty()) {
 			MemBlock firstBlock = new MemBlock("free", largestSize);
-			firstBlock.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
+			firstBlock.setBounds(2, 2, Constants.BLOCK_WIDTH, Constants.MEM_SIZE / Constants.FACTOR);
 			blockList.add(firstBlock);
 			memFrame.bestMemPane.add(firstBlock);
 		}

@@ -7,22 +7,21 @@ import javax.swing.*;
 
 public class Constants {
 	// The total memory, factor of the size, the least memory can be allcated
-	static int memSize = 640;
-	static int factor = 1;
-	static int memLeast = 10;
+	static int MEM_SIZE = 640;
+	static int FACTOR = 1;
+	static int MEM_LEAST = 10;
 	
 	// Size of panel
-	static int blockWidth = 270;
+	static int BLOCK_WIDTH = 270;
 	
 	// Some definitions
-	static Dimension logCatFrame = new Dimension(300, 500);
-	static Rectangle firstPaneRec = new Rectangle(18, 8, blockWidth + 4, memSize / factor + 4);
-	static Rectangle bestPaneRec = new Rectangle(518, 8, blockWidth + 4, memSize / factor + 4);
-	static Rectangle firstCtrlPaneRec = new Rectangle(295, 450, 200, 80);
-	static Rectangle bestCtrlPaneRec = new Rectangle(795, 450, 200, 80);
+	static Dimension LOGCAT_FRAME_NAME = new Dimension(300, 500);
+	static Rectangle FIRST_PANE_REC = new Rectangle(18, 8, BLOCK_WIDTH + 4, MEM_SIZE / FACTOR + 4);
+	static Rectangle BEST_PANE_REC = new Rectangle(518, 8, BLOCK_WIDTH + 4, MEM_SIZE / FACTOR + 4);
+	static Rectangle FIRST_CTRL_PANE_REC = new Rectangle(295, 450, 200, 80);
+	static Rectangle BEST_CTRL_PANE_REC = new Rectangle(795, 450, 200, 80);
 	
-	static Dimension mainFrame = new Dimension(1000,
-			(firstPaneRec.height > firstCtrlPaneRec.y + firstCtrlPaneRec.height ? firstPaneRec.height : (firstCtrlPaneRec.y + firstCtrlPaneRec.height)) + 70);
+	static Dimension MAIN_FRAME = new Dimension(1010, 720);
 	
 	// Enum used to judge which algorithm
 	enum AlgoType {FIRST_FIT, BEST_FIT};
@@ -72,7 +71,7 @@ public class Constants {
 				break;
 			}
 			firstBlock = list.getFirst();
-			firstBlock.setBounds(2, 2, blockWidth, firstBlock.size / factor);
+			firstBlock.setBounds(2, 2, BLOCK_WIDTH, firstBlock.size / FACTOR);
 		}
 
 		int currentPos = 2;
@@ -84,9 +83,9 @@ public class Constants {
 			if (tmpBlock.getUsed()) {
 				if (tmpBlock.beginY != currentPos) {
 					tmpBlock.beginY = currentPos;
-					tmpBlock.setBounds(2, tmpBlock.beginY, blockWidth, tmpBlock.size / factor);
+					tmpBlock.setBounds(2, tmpBlock.beginY, BLOCK_WIDTH, tmpBlock.size / FACTOR);
 				}
-				currentPos += tmpBlock.size / factor;
+				currentPos += tmpBlock.size / FACTOR;
 				continue;
 			} else {
 				switch (type) {
@@ -105,12 +104,12 @@ public class Constants {
 		// Deal with the last free block
 		MemBlock lastBlock= list.getLast();
 		if (lastBlock.getUsed()) {
-			lastBlock.setBounds(2, currentPos, blockWidth, lastBlock.size / factor);
-			currentPos += lastBlock.size / factor;
+			lastBlock.setBounds(2, currentPos, BLOCK_WIDTH, lastBlock.size / FACTOR);
+			currentPos += lastBlock.size / FACTOR;
 			
-			MemBlock freeBlock = new MemBlock("free", factor * (memSize + 2 - currentPos));
+			MemBlock freeBlock = new MemBlock("free", FACTOR * (MEM_SIZE + 2 - currentPos));
 			freeBlock.beginY = currentPos;
-			freeBlock.setBounds(2, freeBlock.beginY, blockWidth, freeBlock.size / factor);
+			freeBlock.setBounds(2, freeBlock.beginY, BLOCK_WIDTH, freeBlock.size / FACTOR);
 			freeBlock.setUsed(false);
 			list.add(freeBlock);
 			switch (type) {
@@ -122,9 +121,9 @@ public class Constants {
 				break;
 			}
 		} else {
-			lastBlock.size = factor * (memSize + 2 - currentPos);
+			lastBlock.size = FACTOR * (MEM_SIZE + 2 - currentPos);
 			lastBlock.beginY = currentPos;
-			lastBlock.setBounds(2, lastBlock.beginY, blockWidth, lastBlock.size / factor);
+			lastBlock.setBounds(2, lastBlock.beginY, BLOCK_WIDTH, lastBlock.size / FACTOR);
 		}
 		
 		switch (type) {

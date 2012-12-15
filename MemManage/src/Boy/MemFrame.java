@@ -9,6 +9,8 @@ import javax.swing.border.*;
 public class MemFrame extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
+	private ImageIcon backgroundImage = null;
+
 	CtrlFirstFit firstFit = null;
 	CtrlBestFit bestFit = null;
 
@@ -44,8 +46,10 @@ public class MemFrame extends JFrame implements ActionListener {
 
 	public MemFrame() {
 		super("Memory Management");
-		this.setSize(Constants.mainFrame);
+		this.setSize(Constants.MAIN_FRAME);
 		this.setLocation(150, 10);
+		
+		backgroundImage = new ImageIcon(".\\Resource\\background.png");
 		
 		// Create menu bar, menus and menu items
 		menuBar = new JMenuBar();
@@ -99,7 +103,17 @@ public class MemFrame extends JFrame implements ActionListener {
 		firstFit = firstFitDel;
 		bestFit = bestFitDel;
 		
-		contentPane = new JPanel();
+		contentPane = new JPanel()
+		{
+			private static final long serialVersionUID = 1L;
+
+			protected void paintComponent(Graphics g)
+            {
+                g.drawImage(backgroundImage.getImage(), 0, 0, null);
+                super.paintComponent(g);
+            }
+        };
+        contentPane.setOpaque(false);
 		contentPane.setLayout(null);
 		this.add(contentPane);
 
@@ -174,15 +188,15 @@ public class MemFrame extends JFrame implements ActionListener {
 		// Set the layout
 		firstCtrlPane.setLayout(null);
 		firstCtrlPane.setLayout(new GridLayout(2, 3, 3, 3));
-		firstCtrlPane.setBounds(Constants.firstCtrlPaneRec);
+		firstCtrlPane.setBounds(Constants.FIRST_CTRL_PANE_REC);
 		bestCtrlPane.setLayout(null);
 		bestCtrlPane.setLayout(new GridLayout(2, 3, 3, 3));
-		bestCtrlPane.setBounds(Constants.bestCtrlPaneRec);
+		bestCtrlPane.setBounds(Constants.BEST_CTRL_PANE_REC);
 		contentPane.add(firstCtrlPane);
 		contentPane.add(bestCtrlPane);
 		
 		cutoffPane.setLayout(null);
-		cutoffPane.setBounds(497, 0, 6, Constants.mainFrame.height);
+		cutoffPane.setBounds(497, 0, 6, Constants.MAIN_FRAME.height);
 		cutoffPane.setBackground(Color.BLACK);
 		contentPane.add(cutoffPane);
 
@@ -231,8 +245,8 @@ public class MemFrame extends JFrame implements ActionListener {
 		// Memory Block
 		firstMemPane.setLayout(null);
 		bestMemPane.setLayout(null);
-		firstMemPane.setBounds(Constants.firstPaneRec);
-		bestMemPane.setBounds(Constants.bestPaneRec);
+		firstMemPane.setBounds(Constants.FIRST_PANE_REC);
+		bestMemPane.setBounds(Constants.BEST_PANE_REC);
 		firstMemPane.setBackground(Color.GREEN);
 		bestMemPane.setBackground(Color.GREEN);
 		firstMemPane.setBorder(new EtchedBorder(EtchedBorder.RAISED));
@@ -240,8 +254,8 @@ public class MemFrame extends JFrame implements ActionListener {
 		contentPane.add(firstMemPane);
 		contentPane.add(bestMemPane);
 
-		firstBottomLabel.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
-		bestBottomLabel.setBounds(2, 2, Constants.blockWidth, Constants.memSize / Constants.factor);
+		firstBottomLabel.setBounds(2, 2, Constants.BLOCK_WIDTH, Constants.MEM_SIZE / Constants.FACTOR);
+		bestBottomLabel.setBounds(2, 2, Constants.BLOCK_WIDTH, Constants.MEM_SIZE / Constants.FACTOR);
 		firstBottomLabel.setOpaque(true);
 		bestBottomLabel.setOpaque(true);
 		firstBottomLabel.setBackground(Color.GREEN);
