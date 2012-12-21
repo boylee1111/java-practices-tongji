@@ -1,11 +1,14 @@
 package boy;
 
-enum File_Type { directory, file };
-enum Status_Type { all_right, rename, illegal_name, memory_lack };
+enum FCB_Type { directory, file };
+enum Status_Type { all_right, dupilication_of_name, illegal_name, memory_lack };
 
 public class Constants {
 	// UI常量定义
 	static int FRAME_LENGTH = 800, FRAME_WIDTH = 600;
+	static int BUTTON_PANE_LENGTH = FRAME_LENGTH, BUTTON_PANE_WIDTH = 100;
+	static int TREE_AND_EDIT_PANE_LENGTH = FRAME_LENGTH, TREE_AND_EDIT_PANE_WIDTH = FRAME_WIDTH - BUTTON_PANE_WIDTH;
+	static int NUMBER_OF_BUTTONS = 5;
 
 	// 文件系统管理常量定义
 	static int BLOCK_SIZE = 256; // 每一个块的大小

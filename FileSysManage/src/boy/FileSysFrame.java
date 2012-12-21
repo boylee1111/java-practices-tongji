@@ -1,7 +1,6 @@
 package boy;
 
 import java.awt.event.*;
-
 import javax.swing.*;
 
 public class FileSysFrame extends JFrame implements WindowListener, ActionListener {
@@ -14,7 +13,6 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 	public FileSysFrame() {
 		super("File System Management");
 		this.setSize(Constants.FRAME_LENGTH, Constants.FRAME_WIDTH);
-		
 		// Create menu
 		menuBar = new JMenuBar();
 		
@@ -70,10 +68,10 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 					JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
-	
+
+	// TODO windowµÄ¼àÌý
 	@Override
 	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -84,31 +82,26 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 }

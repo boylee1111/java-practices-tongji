@@ -10,7 +10,7 @@ public class FileFCB {
 	private long modifyDate; // 最后修改文件时间，时间戳
 	// TODO ACL设置不妥
 	private Map<String, Set<String>> accessList = null; // ACL
-	private File_Type fileType;
+	private FCB_Type FCBType;
 	private	int fileSize;
 	private FileFat fileFat = null;
 	
@@ -73,12 +73,12 @@ public class FileFCB {
 		this.accessList = accessList;
 	}
 
-	public File_Type getFileTyle() {
-		return fileType;
+	public FCB_Type getFCBType() {
+		return FCBType;
 	}
 
-	public void setFileTyle(File_Type fileType) {
-		this.fileType = fileType;
+	public void setFCBType(FCB_Type fCBType) {
+		FCBType = fCBType;
 	}
 
 	public int getFileSize() {
