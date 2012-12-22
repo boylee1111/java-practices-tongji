@@ -1,23 +1,25 @@
-package boy;
+package com.boy;
 
 public class FileFat {
 	private int ID; // 标示符，hashCode表示
 	private int nextID; // 下一个标示符，hashCode表示
-//	private int clusterNum;
 	private String data = null;
+	private int usedSize;
 	private boolean isUsed;
 	
 	public FileFat() {
 		ID = this.hashCode();
+		nextID = -1;
 		isUsed = false;
+		usedSize = 0;
 	}
 
 	public int getID() {
 		return ID;
 	}
 
-	public void setID(int iD) {
-		ID = iD;
+	public void setID(int ID) {
+		this.ID = ID;
 	}
 
 	public int getNextID() {
@@ -27,14 +29,6 @@ public class FileFat {
 	public void setNextID(int nextID) {
 		this.nextID = nextID;
 	}
-
-//	public int getClusterNum() {
-//		return clusterNum;
-//	}
-//
-//	public void setClusterNum(int clusterNum) {
-//		this.clusterNum = clusterNum;
-//	}
 
 	public String getData() {
 		return data;
@@ -51,5 +45,12 @@ public class FileFat {
 	public void setUsed(boolean isUsed) {
 		this.isUsed = isUsed;
 	}
-	
+
+	public int getUsedSize() {
+		return usedSize;
+	}
+
+	public void setUsedSize(int usedSize) {
+		this.usedSize = usedSize;
+	}
 }

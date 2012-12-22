@@ -1,8 +1,8 @@
-package boy;
+package com.boy;
 
 import java.util.*;
+import java.awt.Color;
 import java.awt.event.*;
-
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
@@ -10,13 +10,11 @@ import javax.swing.event.*;
 public class FileSysUIController implements ActionListener, TreeModelListener, TreeExpansionListener, TreeWillExpandListener, TreeSelectionListener, MouseListener {
 	private FileSysUIView fileSysUIView = null;
 	private FileManage fileManage = null;
-	private IOManage IOManage = null;
 	private Map<DefaultMutableTreeNode, FileFCB> connectionMap = null;
 	
-	public FileSysUIController(FileSysUIView fileSysUIView, FileManage fileManage, IOManage IOManage) {
+	public FileSysUIController(FileSysUIView fileSysUIView, FileManage fileManage) {
 		this.fileSysUIView = fileSysUIView;
 		this.fileManage = fileManage;
-		this.IOManage = IOManage;
 		
 		connectionMap = new HashMap<DefaultMutableTreeNode, FileFCB>();
 		DefaultMutableTreeNode rootNode = fileSysUIView.rootNode;
@@ -26,22 +24,17 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 		this.addListenerFromView();
 	}
 	
-	public void print() {
-		Set<Map.Entry<DefaultMutableTreeNode, FileFCB>> set = connectionMap.entrySet();
-		for (Iterator<Map.Entry<DefaultMutableTreeNode, FileFCB>> it = set.iterator(); it.hasNext();) {
-			Map.Entry<DefaultMutableTreeNode, FileFCB> entry = it.next();
-			System.out.println(entry.getKey() + "->" + entry.getValue().getFileName());
-		}
-	}
-	
 	public void addListenerFromView() {
 		fileSysUIView.tree.addMouseListener(this);
+		fileSysUIView.tree.addTreeSelectionListener(this);
 		fileSysUIView.treeModel.addTreeModelListener(this);
 		fileSysUIView.formatButton.addActionListener(this);
 		fileSysUIView.newDirButton.addActionListener(this);
 		fileSysUIView.newFileButton.addActionListener(this);
 		fileSysUIView.deleteButton.addActionListener(this);
 		fileSysUIView.renameButton.addActionListener(this);
+		fileSysUIView.openButton.addActionListener(this);
+		fileSysUIView.saveAndCloseButton.addActionListener(this);
 	}
 	
 	public FileSysUIView getFileSysUIView() {
@@ -146,7 +139,6 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 					connectionMap.remove(selectedNode);
 				}
 				fileSysUIView.treeModel.removeNodeFromParent(selectedNode);
-				this.print();
 			}
 		} else if (obj == fileSysUIView.renameButton) {
 			if (selectedNode.getParent() == null) {
@@ -175,6 +167,28 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 				} else {
 					this.showStatus(result);
 				}
+			}
+		} else if (obj == fileSysUIView.openButton) {
+			if (selectedNode.getAllowsChildren()) {
+				JOptionPane.showMessageDialog(null,
+						"Please choose a file to open!",
+						"Open Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				FileFCB toOpenFCB = connectionMap.get(selectedNode);
+				fileSysUIView.textArea.setEditable(true);
+				fileSysUIView.textArea.setText(fileManage.readFile(toOpenFCB.getID()));
+			}
+		} else if (obj == fileSysUIView.saveAndCloseButton) {
+			if (selectedNode.getAllowsChildren()) {
+				JOptionPane.showMessageDialog(null,
+						"Please choose a file to open!",
+						"Open Error",
+						JOptionPane.ERROR_MESSAGE);
+			} else {
+				FileFCB toSaveFile = connectionMap.get(selectedNode);
+				fileManage.saveFile(toSaveFile.getID(), fileSysUIView.textArea.getText());
+				fileSysUIView.textArea.setEditable(false);
 			}
 		}
 	}
@@ -280,7 +294,25 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 	// TODO TreeSelectionListener的监听
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
+		JTree tree = (JTree)e.getSource();
+		// 获得目前选中结点
+		DefaultMutableTreeNode selectedNode =
+				(DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+
+		if (selectedNode == null)
+			return ;
+		if (selectedNode.getAllowsChildren()) {
+			// TODO获得信息直接输出在TextArea中
+		} else {
+			FileFCB toShowFCB = connectionMap.get(selectedNode);
+			fileSysUIView.textArea.setText(fileManage.readFile(toShowFCB.getID()));
+			fileSysUIView.textArea.setEditable(false);
+		}
 		
+		// 根结点的处理
+		if (selectedNode.isRoot()) {
+			// TODO获得ROOT的信息直接输出在TextArea中
+		}
 	}
 
 	// TODO MouseLitener的监听

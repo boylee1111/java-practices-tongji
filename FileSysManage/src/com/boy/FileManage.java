@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 
 import java.util.*;
 import java.util.regex.*;
@@ -6,51 +6,6 @@ import java.util.regex.*;
 public class FileManage {
 	private List<FileFCB> FCBList = null;
 	private List<FileFat> FatList = null;
-	
-	public static void main(String[] argc) {
-		FileManage a = new FileManage();
-		
-		String[] file = new String[15];
-		FileFCB[] fileFCB = new FileFCB[15];
-		for (int i = 0; i < 15; i++) {
-			file[i] = new String("file" + Integer.toString(i));
-		}
-		for (int i = 0; i < 15; i++) {
-			fileFCB[i] = new FileFCB(file[i]);
-		}
-		String dir1 = new String("dir1");
-		String dir2 = new String("dir2");
-		String dir3 = new String("dir3");
-		FileFCB dirFCB1 = new FileFCB(dir1);
-		FileFCB dirFCB2 = new FileFCB(dir2);
-		FileFCB dirFCB3 = new FileFCB(dir3);
-		
-		a.createDir(dir1, a.getRoot().getID(), dirFCB1);
-		a.createDir(dir2, a.getRoot().getID(), dirFCB2);
-		a.createDir(dir3, dirFCB1.getID(), dirFCB3);
-		
-		for (int i = 0; i < 4; i++) {
-			a.createFile(file[i], dirFCB1.getID(), fileFCB[i]);
-		}
-		for (int i = 4; i < 10; i++) {
-			a.createFile(file[i], dirFCB2.getID(), fileFCB[i]);
-		}
-		for (int i = 10; i < 15; i++) {
-			a.createFile(file[i], dirFCB3.getID(), fileFCB[i]);
-		}
-		
-		a.deleteDir(dirFCB1.getID());
-
-		System.out.println();
-		a.print();
-	}
-	
-	public void print() {
-		for (Iterator<FileFCB> it = FCBList.iterator(); it.hasNext();) {
-			FileFCB tmpFCB = (FileFCB)it.next();
-			System.out.println(tmpFCB.getFileName() + ' ' + tmpFCB.getID() + ' ' + tmpFCB.getParentID());
-		}
-	}
 	
 	public FileManage() {
 		FCBList = new LinkedList<FileFCB>();
@@ -103,6 +58,7 @@ public class FileManage {
 		fileFCB.setParentID(parentID);
 		fileFCB.setFCBType(FCB_Type.file);
 		FileFat fileFat = new FileFat();
+		fileFat.setData("");
 		fileFat.setUsed(true);
 		fileFat.setNextID(Constants.END_OF_FAT);
 		fileFCB.setFileFat(fileFat);
@@ -176,6 +132,59 @@ public class FileManage {
 		}
 		movedFCB.setParentID(parentID);
 		return Status_Type.all_right;
+	}
+	
+	public Status_Type saveFile(int fileID, String buffer) {
+		FileFCB fileFCB = this.searchFCBByID(fileID);
+		FileFat fileFat = fileFCB.getFileFat();
+		String[] subString = this.splitString(buffer);
+		if (subString.length == 1 || subString.length == 0)
+		{
+			fileFat.setData(buffer);
+			fileFat.setUsedSize(buffer.length());
+		} else {
+			FileFat[] tmpFats = new FileFat[subString.length - 1];
+			for (int i = 0; i < tmpFats.length; i++) {
+				tmpFats[i] = new FileFat();
+				tmpFats[i].setUsed(true);
+				tmpFats[i].setData(subString[i]);
+				tmpFats[i].setUsedSize(subString[i].length());
+				FatList.add(tmpFats[i]);
+			}
+			fileFat.setNextID(tmpFats[0].getID());
+			for (int i = 0; i < tmpFats.length - 1; i++) {
+				tmpFats[i].setNextID(tmpFats[i + 1].getID());
+			}
+		}
+		return Status_Type.all_right;
+	}
+	
+	public String readFile(int fileID) {
+		FileFCB fileFCB = this.searchFCBByID(fileID);
+		FileFat fileFat = fileFCB.getFileFat();
+		FileFat tmpFat = fileFat;
+		String buffer = new String("");
+		while (tmpFat.getNextID() != -1) {
+			buffer = String.format(buffer + tmpFat.getData());
+			tmpFat = this.searchFatByID(tmpFat.getNextID());
+		}
+		buffer = String.format(buffer + tmpFat.getData());
+		return buffer;
+	}
+	
+	private String[] splitString(String buffer) {
+		int number = buffer.length() / Constants.CLUSTER_SIZE;
+		int surplus = buffer.length() % Constants.CLUSTER_SIZE;
+		if (surplus != 0)
+			number++;
+		String[] subString = new String[number];
+		for (int i = 0; i < number; i++) {
+			if (i == number - 1)
+				subString[i] = buffer.substring(i * Constants.CLUSTER_SIZE);
+			else
+				subString[i] = buffer.substring(i * Constants.CLUSTER_SIZE, (i + 1) * Constants.CLUSTER_SIZE);
+		}
+		return subString;
 	}
 	
 	private void initRoot() {

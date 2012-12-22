@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 
 import java.awt.event.*;
 import javax.swing.*;

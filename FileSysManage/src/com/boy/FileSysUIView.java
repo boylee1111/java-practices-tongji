@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 
 import java.awt.*;
 import javax.swing.*;
@@ -25,15 +25,17 @@ public class FileSysUIView extends JPanel {
 	JButton newFileButton = null;
 	JButton deleteButton = null;
 	JButton renameButton = null;
+	JButton openButton = null;
+	JButton saveAndCloseButton = null;
 	
 	public FileSysUIView() {
 		backgroundImage = new ImageIcon(".\\Resource\\background.png");
 		this.setLayout(null);
 		
-		buttonPane = new JPanel(new GridLayout(1, Constants.NUMBER_OF_BUTTONS, 10, 10));
+		buttonPane = new JPanel(new GridLayout(1, Constants.NUMBER_OF_BUTTONS));
 		buttonPane.setBounds(0, 0, Constants.BUTTON_PANE_LENGTH, Constants.BUTTON_PANE_WIDTH);
 		buttonPane.setOpaque(false);
-		this.add(buttonPane);
+		this.add(buttonPane);		
 
 		rootNode = new DefaultMutableTreeNode("Root", true);
 		treeModel = new DefaultTreeModel(rootNode);
@@ -65,12 +67,16 @@ public class FileSysUIView extends JPanel {
 		newFileButton = new JButton("new file");
 		deleteButton = new JButton("delete");
 		renameButton = new JButton("rename");
+		openButton = new JButton("open");
+		saveAndCloseButton = new JButton("close");
 		
 		buttonPane.add(formatButton);
 		buttonPane.add(newDirButton);
 		buttonPane.add(newFileButton);
 		buttonPane.add(deleteButton);
 		buttonPane.add(renameButton);
+		buttonPane.add(openButton);
+		buttonPane.add(saveAndCloseButton);
 	}
 	
 	protected void paintComponent(Graphics g) {
