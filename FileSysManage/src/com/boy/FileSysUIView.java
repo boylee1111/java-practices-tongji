@@ -48,7 +48,6 @@ public class FileSysUIView extends JPanel {
 		textArea.setEditable(false);
 		textArea.setOpaque(false);
 		textArea.setLineWrap(true);
-		textArea.setText("fihwioqhfoqiwhfwoqhiofwqhofwqhifowiqhfiwqhpfwhqhfwhqipfhwqhpfwhqpihifpwqpinviqwinpvwpiqfwpjqjpfwqpfwqhpfwhpiwqhifhwpqhpfwqhpfwqhpi");
 
 		treeScrollPane = new JScrollPane(tree);
 		editScrollPane = new JScrollPane(textArea);

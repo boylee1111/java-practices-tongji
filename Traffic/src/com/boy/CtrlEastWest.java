@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 // CtrlNorthSouth.java -- Control the east-west traffic light independently
 import java.util.*;
 import java.awt.*;

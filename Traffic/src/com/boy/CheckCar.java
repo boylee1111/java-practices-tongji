@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 // CheckCar.java -- Remove the car out of screen
 import java.util.*;
 

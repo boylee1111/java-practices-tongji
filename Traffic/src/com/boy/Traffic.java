@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 // Traffic.java -- Main
 import javax.swing.*;
 

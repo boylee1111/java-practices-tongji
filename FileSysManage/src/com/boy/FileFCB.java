@@ -1,8 +1,11 @@
 package com.boy;
 
+import java.io.*;
 import java.util.*;
 
-public class FileFCB {
+public class FileFCB implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private String fileName = null;
 	private int ID; // 使用hashCode作为ID
 	private int parentID;

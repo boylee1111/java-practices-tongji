@@ -5,7 +5,6 @@ public class FileSystem {
 		FileSysUIView fileSysPane = new FileSysUIView();
 		FileManage fileManage = new FileManage();
 		FileSysUIController fileSysUIController = new FileSysUIController(fileSysPane, fileManage);
-		FileSysFrame fileSysFrame = new FileSysFrame();
-		fileSysFrame.add(fileSysUIController.getFileSysUIView());
+		new FileSysFrame(fileSysUIController);
 	}
 }

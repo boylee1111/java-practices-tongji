@@ -1,13 +1,15 @@
 package com.boy;
 
 import java.util.*;
-import java.awt.Color;
+import java.io.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 
-public class FileSysUIController implements ActionListener, TreeModelListener, TreeExpansionListener, TreeWillExpandListener, TreeSelectionListener, MouseListener {
+public class FileSysUIController implements ActionListener, TreeModelListener, TreeExpansionListener, TreeWillExpandListener, TreeSelectionListener, MouseListener, Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private FileSysUIView fileSysUIView = null;
 	private FileManage fileManage = null;
 	private Map<DefaultMutableTreeNode, FileFCB> connectionMap = null;
@@ -43,6 +45,21 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 
 	public void setFileSysUIView(FileSysUIView fileSysUIView) {
 		this.fileSysUIView = fileSysUIView;
+	}
+	public FileManage getFileManage() {
+		return fileManage;
+	}
+
+	public void setFileManage(FileManage fileManage) {
+		this.fileManage = fileManage;
+	}
+
+	public Map<DefaultMutableTreeNode, FileFCB> getConnectionMap() {
+		return connectionMap;
+	}
+
+	public void setConnectionMap(Map<DefaultMutableTreeNode, FileFCB> connectionMap) {
+		this.connectionMap = connectionMap;
 	}
 
 	// TODO ActionListenerµÄ¼àÌý

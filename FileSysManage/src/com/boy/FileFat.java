@@ -1,6 +1,10 @@
 package com.boy;
 
-public class FileFat {
+import java.io.*;
+
+public class FileFat implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
 	private int ID; // 标示符，hashCode表示
 	private int nextID; // 下一个标示符，hashCode表示
 	private String data = null;

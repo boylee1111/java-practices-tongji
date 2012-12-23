@@ -1,4 +1,4 @@
-package boy;
+package com.boy;
 // Car.java -- Class car
 import java.awt.*;
 import java.util.*;

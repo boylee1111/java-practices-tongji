@@ -1,9 +1,12 @@
 package com.boy;
 
+import java.io.Serializable;
 import java.util.*;
 import java.util.regex.*;
 
-public class FileManage {
+public class FileManage implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private List<FileFCB> FCBList = null;
 	private List<FileFat> FatList = null;
 	
@@ -197,13 +200,12 @@ public class FileManage {
 	// 判断命名是否合法
 	private boolean isNameLegal(String fileName) {
 		// TODO 检查命名是否合法
-//		if (fileName == null || fileName.length() <= 0 || fileName.length() >= 255)
-//			return false;
-//		String regex = "^[a-zA-Z_]+[a-zA-Z0-9_]*";
-//		return Pattern.compile(regex).matcher(fileName).matches();
-		return false;
+		if (fileName == null || fileName.length() <= 0 || fileName.length() >= 255)
+			return false;
+		String regex = "^[a-zA-Z_]+[a-zA-Z0-9_]*";
+		return !Pattern.compile(regex).matcher(fileName).matches();
 	}
-	
+
 	// 检测是否重名
 	private boolean isDupilicationOfName(String fileName, int parentID, FCB_Type fileType) {
 		for (Iterator<FileFCB> it = FCBList.iterator(); it.hasNext();) {
@@ -215,7 +217,7 @@ public class FileManage {
 		}
 		return false;
 	}
-	
+
 	// 一些与FCB和Fat表相关的搜索方法
 	private FileFCB searchFCBByID(int ID) {
 		FileFCB tmpFCB = null;
@@ -226,7 +228,7 @@ public class FileManage {
 		}
 		return tmpFCB;
 	}
-	
+
 	private void searchFCBByParentID(int parentID, List<FileFCB> subFCBList) {		
 		FileFCB tmpFCB = null;
 		for (Iterator<FileFCB> it = FCBList.iterator(); it.hasNext();) {
@@ -236,7 +238,7 @@ public class FileManage {
 			}
 		}
 	}
-	
+
 	private FileFat searchNextFatByID(int ID) {
 		FileFat tmpFat = null;
 		for (Iterator<FileFat> it = FatList.iterator(); it.hasNext();) {
@@ -256,7 +258,7 @@ public class FileManage {
 		}
 		return tmpFat;
 	}
-	
+
 	private void recursiveDeleteDir(int dirID, List<FileFCB> toDeleteList) {  
 		int beforeSize = toDeleteList.size();
 		this.searchFCBByParentID(dirID, toDeleteList);
