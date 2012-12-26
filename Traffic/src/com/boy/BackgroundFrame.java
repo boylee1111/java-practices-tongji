@@ -1,11 +1,6 @@
 package com.boy;
 // BackgroundFrame.java -- Initialize the frame of the programming
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 
 import javax.swing.*;
 

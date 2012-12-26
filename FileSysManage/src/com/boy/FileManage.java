@@ -13,7 +13,10 @@ public class FileManage implements Serializable {
 	public FileManage() {
 		FCBList = new LinkedList<FileFCB>();
 		FatList = new LinkedList<FileFat>();
-		initRoot();
+		FileFCB rootFCB = new FileFCB("Root");
+		rootFCB.setParentID(Constants.PARENT_OF_ROOT); // 根目录的父节点ID规定为0
+		rootFCB.setFCBType(FCB_Type.directory);
+		FCBList.add(rootFCB);
 	}
 
 	public List<FileFCB> getFCBList() {
@@ -37,9 +40,13 @@ public class FileManage implements Serializable {
 	}
 
 	public void formatFileSystem() {
+		FileFCB rootFCB = FCBList.get(0);
 		FCBList.clear();
 		FatList.clear();
-		this.initRoot();
+		rootFCB.setParentID(Constants.PARENT_OF_ROOT); // 根目录的父节点ID规定为0
+		rootFCB.setFCBType(FCB_Type.directory);
+		FCBList.add(rootFCB);
+		this.fresh();
 	}
 
 	public Status_Type createDir(String dirName, int parentID, FileFCB dirFCB) {
@@ -76,19 +83,17 @@ public class FileManage implements Serializable {
 		int deleteSize = toDeleteList.size();
 		for (int i = 0; i < deleteSize; i++) {
 			FileFCB tmpFCB = toDeleteList.get(i);
-			if (tmpFCB.getFCBType() == FCB_Type.directory) {
+			if (tmpFCB.getFCBType() == FCB_Type.directory)
 				this.recursiveDeleteDir(tmpFCB.getID(), toDeleteList);
-			}
 		}
 		// 首先删除所有需要删除的文件
 		for (Iterator<FileFCB> it = toDeleteList.iterator(); it.hasNext();) {
 			FileFCB tmpFCB = (FileFCB)it.next();
-			if (tmpFCB.getFCBType() == FCB_Type.file) {
+			if (tmpFCB.getFCBType() == FCB_Type.file)
 				this.deleteFile(tmpFCB.getID());
-				//it.remove();
-			}
 		}
-		FCBList.removeAll(toDeleteList); 
+		FCBList.removeAll(toDeleteList);
+		FCBList.remove(this.searchFCBByID(dirID));
 	}
 	
 	public void deleteFile(int fileID) {
@@ -119,6 +124,7 @@ public class FileManage implements Serializable {
 				return Status_Type.dupilication_of_name;
 			}
 		}
+		changedFCB.setModifyDate(System.currentTimeMillis());
 		changedFCB.setFileName(newName);
 		return Status_Type.all_right;
 	}
@@ -134,17 +140,27 @@ public class FileManage implements Serializable {
 			}
 		}
 		movedFCB.setParentID(parentID);
+		for (int i = 0; i < 50; i++)
+			this.fresh();
 		return Status_Type.all_right;
 	}
 	
 	public Status_Type saveFile(int fileID, String buffer) {
 		FileFCB fileFCB = this.searchFCBByID(fileID);
+		FileFCB parentFCB = this.searchFCBByID(fileFCB.getParentID());
 		FileFat fileFat = fileFCB.getFileFat();
+		if (this.getRoot().getFileSize() - fileFCB.getFileSize() + buffer.length() > Constants.MEMORY_SIZE)
+			return Status_Type.memory_lack;
 		String[] subString = this.splitString(buffer);
 		if (subString.length == 1 || subString.length == 0)
 		{
 			fileFat.setData(buffer);
 			fileFat.setUsedSize(buffer.length());
+			fileFat.setNextID(Constants.END_OF_FAT);
+		} else if (buffer.length() <= Constants.CLUSTER_SIZE) { 
+			fileFat.setData(buffer);
+			fileFat.setUsedSize(buffer.length());
+			fileFat.setNextID(Constants.END_OF_FAT);			
 		} else {
 			FileFat[] tmpFats = new FileFat[subString.length - 1];
 			for (int i = 0; i < tmpFats.length; i++) {
@@ -158,8 +174,27 @@ public class FileManage implements Serializable {
 			for (int i = 0; i < tmpFats.length - 1; i++) {
 				tmpFats[i].setNextID(tmpFats[i + 1].getID());
 			}
+			tmpFats[tmpFats.length - 1].setNextID(Constants.END_OF_FAT);
 		}
+		fileFCB.setFileSize(buffer.length());
+		fileFCB.setModifyDate(System.currentTimeMillis());
+		parentFCB.setModifyDate(System.currentTimeMillis());
+		for (int i = 0; i < 50; i++)
+			this.fresh();
+		this.getRoot().setFileSize(this.getRootSize());
 		return Status_Type.all_right;
+	}
+	
+	public int getRootSize() {
+		FileFCB rootFCB = this.getRoot();
+		int totalSize = 0;
+		for (Iterator<FileFCB> it = FCBList.iterator(); it.hasNext();) {
+			FileFCB tmpFCB = (FileFCB)it.next();
+			if (tmpFCB.getParentID() == rootFCB.getID()) {
+				totalSize += tmpFCB.getFileSize();
+			}
+		}
+		return totalSize;
 	}
 	
 	public String readFile(int fileID) {
@@ -167,12 +202,38 @@ public class FileManage implements Serializable {
 		FileFat fileFat = fileFCB.getFileFat();
 		FileFat tmpFat = fileFat;
 		String buffer = new String("");
-		while (tmpFat.getNextID() != -1) {
+		while (tmpFat.getNextID() != Constants.END_OF_FAT) {
 			buffer = String.format(buffer + tmpFat.getData());
 			tmpFat = this.searchFatByID(tmpFat.getNextID());
 		}
 		buffer = String.format(buffer + tmpFat.getData());
 		return buffer;
+	}
+	
+	public int getSubNumber(int dirID) {
+		List<FileFCB> SubFileList = new LinkedList<FileFCB>();
+		this.searchFCBByParentID(dirID, SubFileList);
+		return SubFileList.size();
+	}
+	
+	public void fresh() {
+		for (Iterator<FileFCB> it = FCBList.iterator(); it.hasNext();) {
+			FileFCB tmpFCB = (FileFCB)it.next();
+			if (tmpFCB.getFCBType() == FCB_Type.directory) {
+				int newSize = this.getDirSize(tmpFCB.getID());
+				tmpFCB.setFileSize(newSize);
+			}
+		}
+	}
+	
+	private int getDirSize(int dirID) {
+		int totalSize = 0;
+		for (Iterator<FileFCB> it = FCBList.iterator(); it.hasNext();) {
+			FileFCB tmpFCB = (FileFCB)it.next();
+			if (tmpFCB.getParentID() == dirID)
+				totalSize += tmpFCB.getFileSize();
+		}
+		return totalSize;
 	}
 	
 	private String[] splitString(String buffer) {
@@ -190,16 +251,8 @@ public class FileManage implements Serializable {
 		return subString;
 	}
 	
-	private void initRoot() {
-		FileFCB root = new FileFCB("Root");
-		root.setParentID(Constants.PARENT_OF_ROOT); // 根目录的父节点ID规定为0
-		root.setFCBType(FCB_Type.directory);
-		FCBList.add(root);
-	}
-	
 	// 判断命名是否合法
 	private boolean isNameLegal(String fileName) {
-		// TODO 检查命名是否合法
 		if (fileName == null || fileName.length() <= 0 || fileName.length() >= 255)
 			return false;
 		String regex = "^[a-zA-Z_]+[a-zA-Z0-9_]*";

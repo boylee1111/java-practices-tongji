@@ -3,11 +3,13 @@ package com.boy;
 import java.util.*;
 import java.io.*;
 import java.awt.event.*;
+import java.text.*;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.event.*;
 
-public class FileSysUIController implements ActionListener, TreeModelListener, TreeExpansionListener, TreeWillExpandListener, TreeSelectionListener, MouseListener, Serializable {
+public class FileSysUIController implements ActionListener, TreeSelectionListener, MouseListener, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private FileSysUIView fileSysUIView = null;
@@ -29,7 +31,6 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 	public void addListenerFromView() {
 		fileSysUIView.tree.addMouseListener(this);
 		fileSysUIView.tree.addTreeSelectionListener(this);
-		fileSysUIView.treeModel.addTreeModelListener(this);
 		fileSysUIView.formatButton.addActionListener(this);
 		fileSysUIView.newDirButton.addActionListener(this);
 		fileSysUIView.newFileButton.addActionListener(this);
@@ -62,15 +63,20 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 		this.connectionMap = connectionMap;
 	}
 
-	// TODO ActionListener的监听
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
 		if (obj == fileSysUIView.formatButton) {
-			// TODO 有问题
+			int result  = JOptionPane.showConfirmDialog(
+					fileSysUIView.buttonPane,
+					"Are you sure to format disk?",
+					"Format Warning",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.NO_OPTION)
+				return ;
 			fileSysUIView.rootNode.removeAllChildren();
 			fileSysUIView.tree.updateUI();
 			fileManage.formatFileSystem();
+			fileSysUIView.textArea.setText(this.getRootInfo());
 			return;
 		}
 		
@@ -105,6 +111,11 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 					selectedNode.add(newDir);
 					TreeNode[] nodes = fileSysUIView.treeModel.getPathToRoot(newDir);
 					TreePath path = new TreePath(nodes);
+					if (selectedFCB.getParentID() == -1)
+						fileSysUIView.textArea.setText(this.getRootInfo());
+					else
+						fileSysUIView.textArea.setText(this.getDirInfo(selectedFCB));
+					fileSysUIView.textArea.setEditable(false);
 					fileSysUIView.tree.scrollPathToVisible(path);
 					fileSysUIView.tree.updateUI();
 					
@@ -131,6 +142,11 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 					selectedNode.add(newFile);
 					TreeNode[] nodes = fileSysUIView.treeModel.getPathToRoot(newFile);
 					TreePath path = new TreePath(nodes);
+					if (selectedFCB.getParentID() == -1)
+						fileSysUIView.textArea.setText(this.getRootInfo());
+					else
+						fileSysUIView.textArea.setText(this.getDirInfo(selectedFCB));
+					fileSysUIView.textArea.setEditable(false);
 					fileSysUIView.tree.scrollPathToVisible(path);
 					fileSysUIView.tree.updateUI();
 					
@@ -156,6 +172,8 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 					connectionMap.remove(selectedNode);
 				}
 				fileSysUIView.treeModel.removeNodeFromParent(selectedNode);
+				fileSysUIView.textArea.setText(this.getRootInfo());
+				fileSysUIView.textArea.setEditable(false);
 			}
 		} else if (obj == fileSysUIView.renameButton) {
 			if (selectedNode.getParent() == null) {
@@ -175,11 +193,18 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 				optionPane.setInputValue("N/A");
 				dialog.setVisible(true);
 				String newName = (String) optionPane.getInputValue();
-				if (newName.equals("N/A"));
+				if (newName.equals("N/A"))
+					return ;
 				Status_Type result = fileManage.rename(toRenameFCB.getID(), newName);
 
 				if (result == Status_Type.all_right) {
 					selectedNode.setUserObject(newName);
+					if (toRenameFCB.getFCBType() == FCB_Type.directory)
+						fileSysUIView.textArea.setText(this.getDirInfo(toRenameFCB));
+					else 
+						fileSysUIView.textArea.setText(this.getFileInfo(toRenameFCB));
+					if (selectedNode.isRoot())
+						fileSysUIView.textArea.setText(this.getRootInfo());
 					fileSysUIView.tree.updateUI();
 				} else {
 					this.showStatus(result);
@@ -192,6 +217,11 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 						"Open Error",
 						JOptionPane.ERROR_MESSAGE);
 			} else {
+				fileSysUIView.deleteButton.setEnabled(false);
+				fileSysUIView.formatButton.setEnabled(false);
+				fileSysUIView.renameButton.setEnabled(false);
+				fileSysUIView.openButton.setEnabled(false);
+				fileSysUIView.saveAndCloseButton.setEnabled(true);
 				FileFCB toOpenFCB = connectionMap.get(selectedNode);
 				fileSysUIView.textArea.setEditable(true);
 				fileSysUIView.textArea.setText(fileManage.readFile(toOpenFCB.getID()));
@@ -204,8 +234,101 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 						JOptionPane.ERROR_MESSAGE);
 			} else {
 				FileFCB toSaveFile = connectionMap.get(selectedNode);
-				fileManage.saveFile(toSaveFile.getID(), fileSysUIView.textArea.getText());
+				Status_Type result = fileManage.saveFile(toSaveFile.getID(), fileSysUIView.textArea.getText());
+				if (result != Status_Type.all_right)
+				{
+					this.showStatus(result);
+					return ;
+				}
+				fileSysUIView.deleteButton.setEnabled(true);
+				fileSysUIView.formatButton.setEnabled(true);
+				fileSysUIView.renameButton.setEnabled(true);
+				fileSysUIView.saveAndCloseButton.setEnabled(false);
+				fileSysUIView.openButton.setEnabled(true);
+				fileSysUIView.textArea.setText(this.getFileInfo(selectedFCB));
 				fileSysUIView.textArea.setEditable(false);
+			}
+		}
+	}
+
+	public void valueChanged(TreeSelectionEvent e) {
+		JTree tree = (JTree)e.getSource();
+		// 获得目前选中结点
+		DefaultMutableTreeNode selectedNode =
+				(DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
+
+		if (selectedNode == null)
+			return ;
+		FileFCB toShowFCB = connectionMap.get(selectedNode); // 获得对应FCB
+
+		if (selectedNode.getAllowsChildren()) {
+			fileSysUIView.newDirButton.setEnabled(true);
+			fileSysUIView.newFileButton.setEnabled(true);
+			fileSysUIView.openButton.setEnabled(false);
+			fileSysUIView.saveAndCloseButton.setEnabled(false);
+			fileSysUIView.textArea.setText(this.getDirInfo(toShowFCB));
+			fileSysUIView.textArea.setEditable(false);
+		} else {
+			fileSysUIView.openButton.setEnabled(true);
+			fileSysUIView.saveAndCloseButton.setEnabled(false);
+			fileSysUIView.newDirButton.setEnabled(false);
+			fileSysUIView.newFileButton.setEnabled(false);
+			fileSysUIView.textArea.setText(this.getFileInfo(toShowFCB));
+			fileSysUIView.textArea.setEditable(false);
+		}
+		
+		// 根结点的处理
+		if (selectedNode.isRoot()) {
+			fileSysUIView.textArea.setText(this.getRootInfo());
+			fileSysUIView.textArea.setEditable(false);
+		}
+		fileSysUIView.deleteButton.setEnabled(true);
+		fileSysUIView.formatButton.setEnabled(true);
+		fileSysUIView.renameButton.setEnabled(true);
+	}
+
+	public void mousePressed(MouseEvent e) {
+		// 通过TreePath来确定移动节点
+		TreePath treePath = fileSysUIView.tree.getPathForLocation(e.getX(), e.getY());
+		if (treePath != null) {
+			fileSysUIView.movePath = treePath;
+		}
+	}
+
+	public void mouseReleased(MouseEvent e) { // 获得需要拖到的父节点
+		TreePath treePath = fileSysUIView.tree.getPathForLocation(e.getX(), e.getY());
+		if (treePath != null && fileSysUIView.movePath != null)
+		{
+			if (fileSysUIView.movePath.isDescendant(treePath) &&
+				fileSysUIView.movePath != treePath) {
+				// 错误的移动
+				JOptionPane.showMessageDialog(null,
+						"Can't move a node to its child node!",
+						"Move Error",
+						JOptionPane.ERROR_MESSAGE);
+				return ;
+			} else if (fileSysUIView.movePath != treePath) { // 不是向子节点移动，且鼠标按下、松开时不是同一个节点  
+				DefaultMutableTreeNode parentNode =
+						(DefaultMutableTreeNode) treePath.getLastPathComponent();
+				FileFCB parentFCB = connectionMap.get(parentNode);
+				DefaultMutableTreeNode childNode = 
+						(DefaultMutableTreeNode) fileSysUIView.movePath.getLastPathComponent();
+				if (!parentNode.getAllowsChildren()) {
+					JOptionPane.showMessageDialog(null,
+							"Please choose a directory as the destination!",
+							"Move Error",
+							JOptionPane.ERROR_MESSAGE);
+					return ;
+				}
+				FileFCB childFCB = connectionMap.get(childNode);
+				Status_Type result = fileManage.move(childFCB.getID(), parentFCB.getID());
+				if (result == Status_Type.all_right) {
+					parentNode.add(childNode);
+					fileSysUIView.movePath = null;
+					fileSysUIView.tree.updateUI();
+				} else {
+					this.showStatus(result);
+				}
 			}
 		}
 	}
@@ -263,136 +386,90 @@ public class FileSysUIController implements ActionListener, TreeModelListener, T
 		dialog.setVisible(true);
 		return (String)optionPane.getInputValue();
 	}
-
-	// TODO TreeModelListener的监听
-	@Override
-	public void treeNodesChanged(TreeModelEvent e) {
-		
+	
+	private Date getData(long timeStamp) throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String d = format.format(timeStamp);
+		return format.parse(d);
 	}
-
-	@Override
-	public void treeNodesInserted(TreeModelEvent e) {
-
-	}
-
-	@Override
-	public void treeNodesRemoved(TreeModelEvent e) {
-		
-	}
-
-	@Override
-	public void treeStructureChanged(TreeModelEvent e) {
-		
-	}
-	// TODO TreeExpansionListener的监听
-	@Override
-	public void treeExpanded(TreeExpansionEvent event) {
-		
-	}
-
-	@Override
-	public void treeCollapsed(TreeExpansionEvent event) {
-		
-	}
-
-	// TODO TreeWillExpandListener的监听
-	@Override
-	public void treeWillExpand(TreeExpansionEvent event)
-			throws ExpandVetoException {
-		
-	}
-
-	@Override
-	public void treeWillCollapse(TreeExpansionEvent event)
-			throws ExpandVetoException {
-		
-	}
-
-	// TODO TreeSelectionListener的监听
-	@Override
-	public void valueChanged(TreeSelectionEvent e) {
-		JTree tree = (JTree)e.getSource();
-		// 获得目前选中结点
-		DefaultMutableTreeNode selectedNode =
-				(DefaultMutableTreeNode)tree.getLastSelectedPathComponent();
-
-		if (selectedNode == null)
-			return ;
-		if (selectedNode.getAllowsChildren()) {
-			// TODO获得信息直接输出在TextArea中
-		} else {
-			FileFCB toShowFCB = connectionMap.get(selectedNode);
-			fileSysUIView.textArea.setText(fileManage.readFile(toShowFCB.getID()));
-			fileSysUIView.textArea.setEditable(false);
+	
+	private String getDirInfo(FileFCB dirFCB) {
+		String name = dirFCB.getFileName();
+		Date createDate = null, modifyDate = null;
+		try {
+			createDate = this.getData(dirFCB.getCreateDate());
+			modifyDate = this.getData(dirFCB.getModifyDate());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		}
-		
-		// 根结点的处理
-		if (selectedNode.isRoot()) {
-			// TODO获得ROOT的信息直接输出在TextArea中
+		String type = null;
+		if (dirFCB.getFCBType() == FCB_Type.directory)
+			type = "directory";
+		else
+			type = "file";
+		String size = String.format(dirFCB.getFileSize() + "B");
+		int subNumber = fileManage.getSubNumber(dirFCB.getID());
+		return String.format(
+				"         name:  " + name +
+				"\n             type:  " + type +
+				"\ncreate date:  " + createDate +
+				"\nmodify date:  " + modifyDate +
+				"\n             size:  " + size +
+				"\n      children:" + subNumber);
+	}
+	
+	private String getFileInfo(FileFCB fileFCB) {
+		String name = fileFCB.getFileName();
+		Date createDate = null, modifyDate = null;
+		try {
+			createDate = this.getData(fileFCB.getCreateDate());
+			modifyDate = this.getData(fileFCB.getModifyDate());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		}
-	}
-
-	// TODO MouseLitener的监听
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// 通过TreePath来确定移动节点
-		TreePath treePath = fileSysUIView.tree.getPathForLocation(e.getX(), e.getY());
-		if (treePath != null) {
-			fileSysUIView.movePath = treePath;
+		String type = null;
+		if (fileFCB.getFCBType() == FCB_Type.directory)
+			type = "directory";
+		else
+			type = "file";
+		String size = String.format(fileFCB.getFileSize() + "B");
+		String text = fileManage.readFile(fileFCB.getID());
+		if (text.length() > Constants.MAX_TEXT) {
+			text = String.format(text.substring(0, Constants.MAX_TEXT) + "......\n\nPlease open to look details.");
 		}
+		return String.format(
+				"         name:  " + name +
+				"\n             type:  " + type +
+				"\ncreate date:  " + createDate +
+				"\nmodify date:  " + modifyDate +
+				"\n             size:  " + size + 
+				"\n---------------------------------------------------------------------------------" + 
+				"\n" + text);
 	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) { // 获得需要拖到的父节点
-		TreePath treePath = fileSysUIView.tree.getPathForLocation(e.getX(), e.getY());
-		if (treePath != null && fileSysUIView.movePath != null)
-		{
-			if (fileSysUIView.movePath.isDescendant(treePath) &&
-				fileSysUIView.movePath != treePath) {
-				// 错误的移动
-				JOptionPane.showMessageDialog(null,
-						"Can't move a node to its child node!",
-						"Move Error",
-						JOptionPane.ERROR_MESSAGE);
-				return ;
-			} else if (fileSysUIView.movePath != treePath) { // 不是向子节点移动，且鼠标按下、松开时不是同一个节点  
-				DefaultMutableTreeNode parentNode =
-						(DefaultMutableTreeNode) treePath.getLastPathComponent();
-				FileFCB parentFCB = connectionMap.get(parentNode);
-				DefaultMutableTreeNode childNode = 
-						(DefaultMutableTreeNode) fileSysUIView.movePath.getLastPathComponent();
-				if (!parentNode.getAllowsChildren()) {
-					JOptionPane.showMessageDialog(null,
-							"Please choose a directory as the destination!",
-							"Move Error",
-							JOptionPane.ERROR_MESSAGE);
-					return ;
-				}
-				FileFCB childFCB = connectionMap.get(childNode);
-				Status_Type result = fileManage.move(childFCB.getID(), parentFCB.getID());
-				if (result == Status_Type.all_right) {
-					parentNode.add(childNode);
-					fileSysUIView.movePath = null;
-					fileSysUIView.tree.updateUI();
-				} else {
-					this.showStatus(result);
-				}
-			}
+	
+	private String getRootInfo() {
+		FileFCB rootFCB = fileManage.getRoot();
+		String name = rootFCB.getFileName();
+		Date createDate = null, modifyDate = null;
+		try {
+			createDate = this.getData(rootFCB.getCreateDate());
+			modifyDate = this.getData(rootFCB.getModifyDate());
+		} catch (ParseException e1) {
+			e1.printStackTrace();
 		}
+		String size = String.format(fileManage.getRootSize() + "B");
+		int subNumber = fileManage.getSubNumber(rootFCB.getID());
+		String remainSize = String.format(Constants.MEMORY_SIZE - rootFCB.getFileSize() + "B");
+		return String.format(
+				"         name:  " + name +
+				"\ncreate date:  " + createDate +
+				"\nmodify date:  " + modifyDate +
+				"\n             size:  " + size +
+				"\nremain size:  " + remainSize +
+				"\n      children:  " + subNumber);
 	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		
-	}
+	
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
 }

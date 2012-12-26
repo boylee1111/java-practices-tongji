@@ -1,6 +1,7 @@
 package com.boy;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 
@@ -19,7 +20,9 @@ public class FileSysUIView extends JPanel {
 	TreePath movePath = null;
 	JTextArea textArea = null;
 	JScrollPane treeScrollPane = null, editScrollPane = null;
-
+	
+	Font font = null;
+	
 	JButton formatButton = null;
 	JButton newDirButton = null;
 	JButton newFileButton = null;
@@ -31,11 +34,11 @@ public class FileSysUIView extends JPanel {
 	public FileSysUIView() {
 		backgroundImage = new ImageIcon(".\\Resource\\background.png");
 		this.setLayout(null);
-		
+
 		buttonPane = new JPanel(new GridLayout(1, Constants.NUMBER_OF_BUTTONS));
 		buttonPane.setBounds(0, 0, Constants.BUTTON_PANE_LENGTH, Constants.BUTTON_PANE_WIDTH);
-		buttonPane.setOpaque(false);
-		this.add(buttonPane);		
+//		buttonPane.setOpaque(false);
+		this.add(buttonPane);
 
 		rootNode = new DefaultMutableTreeNode("Root", true);
 		treeModel = new DefaultTreeModel(rootNode);
@@ -46,20 +49,19 @@ public class FileSysUIView extends JPanel {
 		
 		textArea = new JTextArea();
 		textArea.setEditable(false);
-		textArea.setOpaque(false);
 		textArea.setLineWrap(true);
 
 		treeScrollPane = new JScrollPane(tree);
 		editScrollPane = new JScrollPane(textArea);
-		editScrollPane.setOpaque(false);
 		
 		treeAndEditPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				true, treeScrollPane, editScrollPane);
 		treeAndEditPane.setBounds(0, Constants.BUTTON_PANE_WIDTH,
 				Constants.TREE_AND_EDIT_PANE_LENGTH - 5, Constants.TREE_AND_EDIT_PANE_WIDTH - 50);
-		treeAndEditPane.setOpaque(false);
 		treeAndEditPane.setDividerLocation(200);
 		this.add(treeAndEditPane);
+		
+		font = new Font("Times New Roman", Font.BOLD, 23);
 		
 		formatButton = new JButton("format");
 		newDirButton = new JButton("new dir");
@@ -68,6 +70,21 @@ public class FileSysUIView extends JPanel {
 		renameButton = new JButton("rename");
 		openButton = new JButton("open");
 		saveAndCloseButton = new JButton("close");
+		
+		formatButton.setFont(font);
+		formatButton.setOpaque(false);
+		newDirButton.setFont(font);
+		newDirButton.setOpaque(false);
+		newFileButton.setFont(font);
+		newFileButton.setOpaque(false);
+		deleteButton.setFont(font);
+		deleteButton.setOpaque(false);
+		renameButton.setFont(font);
+		renameButton.setOpaque(false);
+		openButton.setFont(font);
+		openButton.setOpaque(false);
+		saveAndCloseButton.setFont(font);
+		saveAndCloseButton.setOpaque(false);
 		
 		buttonPane.add(formatButton);
 		buttonPane.add(newDirButton);
@@ -104,7 +121,6 @@ class TreeCellRenderer extends DefaultTreeCellRenderer {
 		if (node.isRoot()) {
 			this.setIcon(new ImageIcon(".\\Resource\\icons\\root.png"));
 		}
-	
 		return this;
 	}
 }

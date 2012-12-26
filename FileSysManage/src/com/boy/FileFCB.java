@@ -11,7 +11,6 @@ public class FileFCB implements Serializable {
 	private int parentID;
 	private long createDate; // 创建文件时间，时间戳
 	private long modifyDate; // 最后修改文件时间，时间戳
-	// TODO ACL设置不妥
 	private Map<String, Set<String>> accessList = null; // ACL
 	private FCB_Type FCBType;
 	private	int fileSize;
@@ -21,10 +20,9 @@ public class FileFCB implements Serializable {
 		this.fileName = fileName;
 		ID = this.hashCode();
 		createDate = modifyDate = System.currentTimeMillis();
-		// TODO 初始化ACL
-//		accessList = new HashMap<String, Set<String>>();
-//		accessList.put("read", new HashSet<String>());
-//		accessList.put("write", new HashSet<String>());
+		accessList = new HashMap<String, Set<String>>();
+		accessList.put("read", new HashSet<String>());
+		accessList.put("write", new HashSet<String>());
 		fileSize = 0;
 	}
 

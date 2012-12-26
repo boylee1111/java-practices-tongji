@@ -53,14 +53,12 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 		this.addWindowListener(this);
 		
 		this.setJMenuBar(menuBar);
-		// TODO 设置窗口初始位置
 		this.setLocation(100, 100);
 		this.setResizable(false);
 		this.setVisible(true);
 		this.add(this.fileSysUIController.getFileSysUIView());
 	}
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object event = e.getSource();
 		if (event == exitMenuItem) {
@@ -86,52 +84,18 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 		this.fileSysUIController = fileSysUIController;
 	}
 
-	// TODO window的监听
-	@Override
-	public void windowOpened(WindowEvent e) {
-		
-	}
-
-	@Override
 	public void windowClosing(WindowEvent e) {
 		this.save();
 		System.exit(0);
 	}
 
-	@Override
-	public void windowClosed(WindowEvent e) {
-
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		
-	}
-	
 	private void save() {
-//		byte[] buffer = new byte[Constants.MEMORY_SIZE];
-		File f = new File("data.dat");
+		File f = new File(Constants.INFO_FILE);
 		FileOutputStream fos = null;
 		ObjectOutputStream oos = null;
 		try {
 			fos = new FileOutputStream(f, false);
 			oos = new ObjectOutputStream(fos);
-//			oos.write(buffer);
 			oos.writeObject(fileSysUIController);
 			fos.close();
 			oos.close();
@@ -143,7 +107,7 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 	}
 	
 	private FileSysUIController get() {
-		File f = new File("data.dat");
+		File f = new File(Constants.INFO_FILE);
 		FileSysUIController tmpFileSysUIController = null;
 		FileInputStream fis = null;
 		ObjectInputStream ois = null;
@@ -156,10 +120,17 @@ public class FileSysFrame extends JFrame implements WindowListener, ActionListen
 		} catch (FileNotFoundException e) {
 			tmpFileSysUIController = null;
 		} catch (IOException e) {
-			e.printStackTrace();
+			tmpFileSysUIController = null;
 		} catch (ClassNotFoundException e) {
 			tmpFileSysUIController = null;
 		}
 		return tmpFileSysUIController;
 	}
+	
+	public void windowOpened(WindowEvent e) {}
+	public void windowClosed(WindowEvent e) {}
+	public void windowIconified(WindowEvent e) {}
+	public void windowDeiconified(WindowEvent e) {}
+	public void windowActivated(WindowEvent e) {}
+	public void windowDeactivated(WindowEvent e) {}
 }

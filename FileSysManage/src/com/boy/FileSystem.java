@@ -5,6 +5,7 @@ public class FileSystem {
 		FileSysUIView fileSysPane = new FileSysUIView();
 		FileManage fileManage = new FileManage();
 		FileSysUIController fileSysUIController = new FileSysUIController(fileSysPane, fileManage);
+		SwingUtil.setLookAndFeel();
 		new FileSysFrame(fileSysUIController);
 	}
 }
